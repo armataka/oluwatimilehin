@@ -225,8 +225,6 @@
   .pron .sy { display: inline-block; transition: color .25s, transform .3s var(--spring) }
   .pron .sy.on { color: var(--accent); transform: translateY(-3px) scale(1.08) }
   .pron .sy.done { color: var(--ink) }
-  .pron .spk { position: absolute; left: calc(100% + 5px); top: .2em; opacity: 0; transform: translateX(-3px); transition: opacity .3s var(--out), transform .3s var(--out) }
-  .pron:hover .spk, .pron.play .spk { opacity: 1; transform: none }
 
 
   /* project thumbnails: the product's mark on a soft gradient in its colours */
@@ -428,7 +426,6 @@ a:hover .thumb.art, a:focus-visible .thumb.art { filter: none }
   .pn a:hover .nt { color: var(--accent) }
   .pron:hover { --pc: var(--accent) }
 }
-.pron .spk { transition: opacity .3s var(--out), transform .3s var(--out), color .3s }
 
 /* ---- a loop of screens ---- */
 .loop { margin: var(--s6) 0 }

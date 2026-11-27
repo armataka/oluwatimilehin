@@ -12,7 +12,7 @@ export default async function Home() {
   return (
     <main className="home">
       <section className="intro">
-        <p data-r>Hi, my name is {site.first} <Pronounce say={site.say} meaning={site.meaning} audio={site.audio} />, <br className="d" />
+        <p data-r>Hi, my name is {site.first} <Pronounce say={site.say} meaning={site.meaning} />, <br className="d" />
           a product designer in Lagos, Nigeria.</p>
         {home.intro.map((p, i) => <p key={i} data-r className="s2">{lines(p)}</p>)}
         <p data-r className="s2">{home.openTo ? <>{home.openTo} <br className="d" /></> : null}
