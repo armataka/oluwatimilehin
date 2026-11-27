@@ -264,7 +264,7 @@
 @media (hover: hover){.home .row:hover .t { background-size: 100% 1px }
 .home .row:hover .yr { color: var(--ink-2) }}
 .home .note { font-size: 12.5px; margin: var(--s3) 0 0 }
-.home .links { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); margin: 0; font-weight: 500 }
+.home .links { display: flex; flex-wrap: wrap; gap: var(--s2) 18px; margin: 0; font-weight: 500 }
 @media (max-width: 480px){.home .row { grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px }
 }
 .me h1 { font-size: 22px; line-height: 1.3; letter-spacing: -.012em }
@@ -281,7 +281,7 @@
 .me .kv { display: grid; gap: var(--s3); margin: 0 }
 .me .kv div { display: grid; grid-template-columns: 110px 1fr; gap: var(--s3) }
 .me .kv dd { margin: 0 }
-.me .hello { display: flex; flex-wrap: wrap; gap: 4px 20px }
+.me .hello { display: flex; flex-wrap: wrap; gap: 4px 16px }
 @media (max-width: 600px){
 .me .kv div { grid-template-columns: 1fr; gap: 0 }}
 .kit h1 { font-size: 22px; line-height: 1.3; letter-spacing: -.012em; margin-bottom: var(--s5) }
@@ -489,3 +489,16 @@ a:hover .thumb.art, a:focus-visible .thumb.art { filter: none }
 .np a.dim { color: #b9b8b2; transition: color .2s } .np a.dim:hover { color: #1ed760 }
 .np:not(.live) .note-ic { animation: none; color: #5a5a55 }
 @media (max-width: 760px) { .np > .dim { display: inline; max-width: 46vw } }
+
+/* ---- call to action ---- */
+.cta { margin-top: var(--s7); padding: 28px; border-radius: 12px; background: var(--wash); display: grid; gap: 6px }
+.cta p { margin: 0 }
+.cta-k { font: 500 10.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3) }
+.cta-h { font-size: 18px; line-height: 1.35; letter-spacing: -.012em; font-weight: 600; max-width: 30ch; text-wrap: balance; margin-top: 6px !important }
+.cta-a { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px !important }
+.btn { display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: var(--ink); color: var(--bg); font-weight: 600; font-size: 13.5px; transition: transform .3s var(--out), background .3s var(--out), color .3s }
+.btn:hover { background: var(--accent); color: #fff; transform: translateY(-1px) }
+.btn:active { transform: scale(.97) }
+.btn.ghost { background: none; color: var(--ink); box-shadow: inset 0 0 0 1px var(--line) }
+.btn.ghost:hover { background: none; color: var(--accent); box-shadow: inset 0 0 0 1px currentColor }
+.frame { padding-bottom: 96px }

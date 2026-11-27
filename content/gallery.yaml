@@ -8,3 +8,7 @@ items:
   - { image: /media/tama/casetype.webp, title: Documents a case type requires, project: tama, locked: true }
   - { image: /media/kita/contract.webp, title: A contract, project: kita, locked: true }
   - { image: /media/kita/products.webp, title: 'Assets: products', project: kita, locked: true }
+  - { image: /media/kita/contracts-overview.webp, title: Contracts overview, project: kita, locked: true }
+  - { image: /media/kita/assets-overview.webp, title: Assets overview, project: kita, locked: true }
+  - { image: /media/kita/contracts.webp, title: All contracts, project: kita, locked: true }
+  - { image: /media/kita/asset.webp, title: An asset’s record, project: kita, locked: true }

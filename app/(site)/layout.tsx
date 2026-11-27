@@ -33,6 +33,12 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
             <Nav />
           </header>
           {children}
+          {/* the ask, at the end of every page */}
+          <aside className="cta" aria-label="Get in touch" data-r>
+            <p className="cta-k">Hiring a senior product designer?</p>
+            <p className="cta-h">I’m open to senior roles, remote or in Lagos. Tell me what you’re building.</p>
+            <p className="cta-a"><a className="btn" href={`mailto:${site.email}?subject=${encodeURIComponent('A product design role')}`}>Email me</a><a className="btn ghost" href={site.resume}>Read my résumé</a></p>
+          </aside>
         </div>
       </div>
       <Footer />

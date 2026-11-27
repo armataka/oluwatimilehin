@@ -32,9 +32,9 @@ export default async function Me() {
           {me.rightNow.map((r, i) => (<div key={i}><dt className="s3">{r.label}</dt><dd>{r.value}</dd></div>))}
           <div><dt className="s3">Local time</dt><dd className="ic"><Icon name="clock" size={14} />Lagos, <time data-clock className="num" suppressHydrationWarning /> (UTC+1)</dd></div>
           <div><dt className="s3">Say hello</dt><dd className="hello">
-            <a className="ic" href={`mailto:${site.email}`}><Icon name="mail" size={14} /><span className="u">Email</span></a>
-            <a className="ic" href={site.linkedin}><Icon name="linkedin" size={14} /><span className="u">LinkedIn</span></a>
-            <a className="ic" href={site.resume}><Icon name="file-text" size={14} /><span className="u">Résumé</span></a>
+            <a className="u" href={`mailto:${site.email}`}>Email</a>
+            <a className="u" href={site.linkedin}>LinkedIn</a>
+            <a className="u" href={site.resume}>Résumé</a>
           </dd></div>
         </dl>
       </section>
