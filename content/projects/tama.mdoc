@@ -1,0 +1,94 @@
+---
+name: TAMA
+order: 1
+line: Tax audit management for a state revenue authority
+year: 2025–26
+locked: true
+thumb: tama
+headline: Making every tax audit visible, from planning to assessment
+meta:
+  - label: Client
+    value: A Nigerian state tax authority
+  - label: Role
+    value: Sole product designer
+  - label: Timeline
+    value: Nov 2025 – Aug 2026
+  - label: Team
+    value: About 12, across two teams
+  - label: Scope
+    value: Research, IA, interaction, UI guidelines
+  - label: Status
+    value: Built; rolls out next audit cycle
+lede: A Nigerian state tax authority audited corporate taxpayers using paper files, spreadsheets, Word documents and email threads. Every audit passes through a long chain of people before a tax assessment can be raised, and nobody along that chain could see where an audit stood without waiting for someone to update a spreadsheet, usually every week or two.
+summary:
+  - "TAMA replaces all of that, and I was its only designer. I designed it end to end: how external consultants apply to audit for the authority, how admins set up audit cycles and document requirements, how cases are created, approved and allocated, and every review step until a vetted report reaches the assessment unit."
+---
+## A long chain of custody
+
+Before a tax assessment can be raised, an audit report passes through eight stages, inside the authority and across the external firms it hires. Every review stage can send it back.
+
+{% Steps items=[{phase: "Set up", stage: "Set up", who: "System admin", what: "Opens audit cycles and planning windows, sets the documents each audit needs, manages roles and permissions, and vets external consultants, who must already be registered corporate taxpayers before they can apply.", sendsBack: false}, {phase: "Allocation", stage: "Create", who: "Audit manager", what: "Creates the case and assigns an audit team: one external auditor and one internal auditor.", sendsBack: false}, {phase: "", stage: "Approve", who: "Audit executive", what: "Approves the allocation. Both auditors are notified and the audit begins.", sendsBack: false}, {phase: "Fieldwork", stage: "Fieldwork", who: "Audit team, with TAFU", what: "The team audits the taxpayer on site. Field officers from TAFU support and oversee them throughout.", sendsBack: false}, {phase: "Review", stage: "Field review", who: "TAFU", what: "Reviews the submitted report.", sendsBack: true}, {phase: "", stage: "Compliance", who: "Records & Correspondence", what: "Checks the report for compliance.", sendsBack: true}, {phase: "", stage: "Vetting", who: "Review officers, then the Review head", what: "Each officer in turn re-computes the figures and flags liabilities the audit team missed. The head chooses the strongest of their submissions.", sendsBack: true}, {phase: "Assessment", stage: "Assessment", who: "Assessment unit", what: "The head’s handoff approves the report, and the case is ready for an assessment to be raised.", sendsBack: false}] /%}
+
+The Chairman and directors follow all of this from an oversight view built by the other team. My side covers everything from setup to the handoff into assessment.
+
+## The problem was visibility
+
+The process itself wasn’t new; the authority had run it for years. What it couldn’t do was see it. Progress lived in spreadsheets updated by hand every week or two, so at any point in a cycle, the people accountable for audits couldn’t tell which cases were moving, which were stuck, or where.
+
+In TAMA, every case carries its stage, and every role has a dashboard of the cases in its hands and where each one stands.
+
+{% Figure label="Audit manager’s dashboard: every case and its stage" caption="" ratio="16 / 10" /%}
+
+## Learning tax audit while designing it
+
+I had never worked in tax. The client hadn’t finished its discovery before hiring the contractors, and the other team had already started building when I joined. So I learned on the job: I set up sessions with the authority’s subject-matter experts and joined the discovery calls the business analysts were running, while designing the flows at the same time.
+
+## Two roles to untangle case allocation
+
+The authority’s process for creating and approving audit cases was overly complicated. Rather than design screens around it, I proposed two roles with a clean split.
+
+**Audit managers** create cases and assign each one an audit team: one external auditor and one internal auditor. The **audit executive**, the managers’ superior, approves the allocation. Once it’s approved, both auditors are notified and the audit begins. Everything after that point hangs off this handshake.
+
+{% Figure label="Creating a case and assigning the audit team" caption="" ratio="16 / 10" /%}
+
+## A separate portal, with its own rules
+
+When I reviewed the other team’s build, it was clear it couldn’t carry what my side of the project needed: external users, data-dense audit cases and long, multi-step reviews. This part of the project was big enough to have its own team, so I proposed giving it its own portal and its own interface guidelines.
+
+It was a hard sell. At one point the client denied having approved it. What settled it was the work itself: once they saw how dense the audit data was, it was clear the existing platform hadn’t been built for it.
+
+## Rules admins can change
+
+Audit cycles, planning and proposal windows, the documents each audit requires, roles and permissions: all of them change from one cycle to the next. With the business analyst, who was also the product manager, I made them configurable by system admins instead of fixed in code.
+
+Admins also vet the external consultants who apply to audit for the authority. A consultant must already be a registered corporate taxpayer, and meet the authority’s other requirements, before they can apply.
+
+{% Figure label="Setting up an audit cycle and its document requirements" caption="" ratio="16 / 10" /%}
+
+## Designing the review chain
+
+Three units check every report in turn: TAFU, then Records and Correspondence, then the Review Unit. Each can approve a report or send it back to the step before.
+
+The Review Unit is the most involved. Two or more review officers vet the report one after another, each re-computing the figures and flagging liabilities the audit team may have missed. The Review Head then compares their submissions, chooses the one that best meets the requirements and hands it to the assessment unit. That handoff is what approves the report.
+
+{% Figure label="The Review Head comparing officers’ submissions" caption="" ratio="16 / 10" /%}
+
+## When the client changed the colour
+
+From my own research I’d chosen a blue for the portal. After the client had approved the early demos, they asked for the green used by the other team’s product instead. Because every screen was built from the styles and components in TAMA’s interface guidelines, the change was mostly a matter of updating colour styles, not redrawing screens.
+
+{% Figure label="The same screen, in blue and in green" caption="" ratio="21 / 9" /%}
+
+## Shipping through four handoffs
+
+The hardest constraint wasn’t the domain, it was turnover. The first developer pairing didn’t work out, and over the project I handed the designs over to four developers at different times.
+
+Written specs lived in the interface guidelines file in Figma, but under pressure to deliver complete flows on time, they stayed thinner than I’d have liked. I made up for it with walkthroughs: I took each developer through the flows in detail and recorded most of the sessions. I already ran demos for stakeholders, so the format was ready.
+
+When my contract’s first six months ended in April, I stayed on month to month until August to support the developers and managers.
+
+## Where it stands
+
+{% Stats items=[{value: "8", label: "Stages from setup to assessment"}, {value: "12+", label: "Roles, inside and outside the authority"}, {value: "4", label: "Developer handoffs"}] /%}
+
+Everything I designed was built. The authority’s subject-matter experts used the platform to run real audit scenarios. TAMA rolls out ahead of the authority’s next audit cycle, and the remaining support work continues without me. It hasn’t launched yet, so there are no usage figures.

@@ -1,0 +1,74 @@
+---
+name: Kita
+order: 2
+line: The platform an energy company runs its operations on
+year: 2024–26
+locked: true
+thumb: kita
+headline: Replacing the spreadsheets an energy company runs on
+meta:
+  - label: Client
+    value: Asiko Energy, internal platform
+  - label: Role
+    value: Sole product designer
+  - label: Timeline
+    value: 2024 – present
+  - label: Team
+    value: Two engineers and a product lead
+  - label: Scope
+    value: Research, IA, interaction, design system
+  - label: Status
+    value: Live; Logistics uses it daily
+lede: Asiko Energy trades and moves LPG, propane, butane, CNG and LNG. Before Kita, each of its divisions ran on its own spreadsheets. Kita is the internal platform that replaced them.
+summary:
+  - Operations, the backbone of the business, manages inventory on Kita and has more modules there than any other division. Logistics logs every trip. Sales and marketing, finance and legal have their own modules, and the CEO follows all of it from a dashboard he arranges himself. I’ve been Kita’s only designer since 2024, responsible for its design system and more than a dozen modules.
+---
+## One platform, many divisions
+
+Kita serves divisions that work very differently. Operations runs inventory across five gas products. Logistics plans and logs deliveries. Sales and marketing track customers and pricing, finance watches costs, and legal manages contracts and licences. Two things hold it together: one design system, and data that moves between modules instead of being typed in twice.
+
+{% Modules items=[{name: "Ton-kilometres", description: "Trips, distances and freight performance against target"}, {name: "Dashboards", description: "One the CEO builds himself, and a matrix for comparing periods"}, {name: "Reports", description: "Sales and customer performance, transit loss, pricing, product sourcing"}, {name: "Inventory", description: "Operations’ stock log and management"}, {name: "Contracts", description: "Agreements, obligations, payments and reminders"}, {name: "Licences & permits", description: "Regulatory paperwork the business must keep current"}, {name: "Assets", description: "Products, and the individual units of each"}] /%}
+
+Alongside those: fleet tracking, fuel requests, issues, a stack list, depot insights and an exchange-rate tool.
+
+{% Figure label="Design system: tables, filters and report layouts" caption="" ratio="16 / 10" /%}
+
+## Ton-kilometres: the module used every day
+
+A tonne-kilometre is one tonne of cargo moved one kilometre. It’s how Asiko measures freight work: what deliveries cost, how its own fleet compares with third-party trucks, and how each truck performs against its target.
+
+Before Kita, logistics officers worked it out by hand in spreadsheets, maintained the formulas, and rebuilt the charts for every report: by location, by business channel, by truck category, against monthly targets. Every report was out of date by the time it was finished.
+
+I split the module into an input and an output. **Trips** is where an officer logs each delivery: the truck, its location, the payload pattern (loaded out and empty back, empty out and loaded back, or empty both ways), the cargo and the route. Kita subtracts the truck’s tare weight, recorded once in Assets, so every tonne-kilometre counts cargo alone, and it works out the distance itself. The **performance report** turns those trips into the figures Logistics and Finance plan with: trips, tonnes moved, tonne-kilometres, the average per trip, own fleet against third-party, and budget against actual.
+
+I kept Trips close to the spreadsheet officers already knew: a dense table with filters, because that’s how they think about the work.
+
+{% Figure label="Trips: the table officers log deliveries in" caption="" ratio="16 / 10" /%}
+
+{% Figure label="Performance report" caption="" ratio="16 / 10" /%}
+
+{% Stats items=[{value: "Daily", label: "Trips logged by Logistics"}, {value: "Weekly", label: "Feeds the EXCO report"}, {value: "2", label: "Divisions plan with it"}] /%}
+
+## A dashboard the CEO builds himself
+
+Kita has a lot of reports, and the CEO wanted oversight across many of them at a glance. But what he needed to see changed from day to day and week to week, so another fixed overview screen would have been out of date as soon as it shipped.
+
+Instead of designing one, I turned the charts, metrics and stats from across Kita into widgets, and gave him a dashboard he can add to, rearrange and edit himself. There are more than fifteen widgets now, and he uses it.
+
+{% Figure label="Build-your-own dashboard: adding a widget" caption="" ratio="16 / 10" /%}
+
+## Comparing like with like
+
+The CEO’s quarterly reports to the board need context. In this business, performance is judged against similar periods under similar conditions, so his idea was to compare them side by side: the current period against the prior one, and actual against budget, in one view. The charts didn’t share a layout, so no single comparison pattern fitted them all.
+
+{% Figure label="Period comparison matrix" caption="" ratio="16 / 10" /%}
+
+## Contracts, and the 53 laptops
+
+Contracts started as a request for a simple tracker. Talking to legal, procurement and operations showed the real problem was obligations: renewal dates, payments and deadlines that nobody was reminded about. So I designed contract management instead: a directory, a detail view with activity, revisions, payments and documents, reusable contract types, one shared list of counterparties, and reminders. Licences and permits followed.
+
+In Assets, staff were registering 53 identical laptops one at a time. Separating products (the make and model) from units (each physical laptop) fixed that, and shaped every view after it.
+
+## What hasn’t landed
+
+Assets and Contracts are live but lightly used. Assets, because the company is rethinking how it creates and tracks assets as its business model changes. Contracts, because most of the legal team has turned over and the new team is still settling in. Shipping a module isn’t the same as people using it.

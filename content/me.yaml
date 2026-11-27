@@ -1,0 +1,18 @@
+bio:
+  - "I’m a product designer in Lagos. For five years I’ve designed operational software, mostly as the only designer in the room, which means I’ve owned all of it: the research, the information architecture, the design system and the handoff to engineering."
+  - Software fascinates me, especially how it gets from an idea onto a screen people depend on every day. The spreadsheet might be the most versatile tool anyone has built, and most of my work is about replacing one with something better.
+playbook:
+  - title: Learn the business before drawing the interface.
+    text: On Kita, that meant sitting with logistics officers until I understood what a tonne-kilometre is and why they calculate it the way they do. On TAMA, it meant learning how a tax audit moves through an agency, from its own experts, while the build was already running.
+  - title: Start from the spreadsheet.
+    text: Most of what I design replaces one. The spreadsheet already works, badly, and people have built habits around it, so I read it first and keep what they already understand.
+  - title: Design the data and the roles, not just the screens.
+    text: Staff were registering 53 identical laptops one at a time; separating products from units fixed it. Audit cases were stuck in a tangle of approvals; two new roles untangled it.
+  - title: Build for a change of mind.
+    text: When TAMA’s client asked for a different colour after approving the demos, the interface guidelines meant updating styles, not redrawing screens.
+offTheClock: "When I’m not designing, I’m watching sport: Chelsea, Formula 1 (I’m a Hamilton fan), the NFL, the NBA, tennis and Shohei Ohtani. I read comics, fiction and non-fiction, and I’m learning the guitar."
+rightNow:
+  - label: Open to
+    value: Senior product design roles, remote or in Lagos
+  - label: Learning
+    value: The guitar
