@@ -237,11 +237,11 @@
   .thumb.tama { --g: url(/thumbs/tama.webp) } .thumb.kita { --g: url(/thumbs/kita.webp) } .thumb.brydge { --g: url(/thumbs/brydge.webp) }
   @media (prefers-reduced-motion: reduce) { .thumb.art { transition: transform .5s var(--out) } a:hover .thumb.art { background-position: 0% 50% } }
   .thumb.art::after { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .12); pointer-events: none }
-  .thumb svg { position: relative; z-index: 1; width: 44%; height: auto; fill: currentColor; filter: drop-shadow(0 1px 3px rgb(0 0 0 / .3)); transition: transform .6s var(--out) }
-  .thumb .wm { position: relative; z-index: 1; font: 600 11.5px/1 var(--sans); letter-spacing: -.02em; text-shadow: 0 1px 3px rgb(0 0 0 / .35), 0 0 12px rgb(0 0 0 / .2) }
+  .thumb svg { position: relative; z-index: 1; width: 34%; height: auto; fill: currentColor; filter: drop-shadow(0 1px 3px rgb(0 0 0 / .3)); transition: transform .6s var(--out) }
+  .thumb .wm { position: relative; z-index: 1; font: 600 10px/1 var(--sans); letter-spacing: -.02em; text-shadow: 0 1px 3px rgb(0 0 0 / .35), 0 0 12px rgb(0 0 0 / .2) }
   a:hover .thumb svg { transform: scale(1.06) }
-  .thumb.tama svg { width: 50% }
-  .thumb.kita svg { width: 32% }
+  .thumb.tama svg { width: 38% }
+  .thumb.kita svg { width: 23% }
   a:hover .thumb { transform: translateY(-2px) }
   @media (max-width: 480px) { .thumb { width: 60px; height: 42px } }
 
