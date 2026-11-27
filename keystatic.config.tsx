@@ -35,7 +35,7 @@ export default config({
           label: 'Introduction',
           itemLabel: (p) => p.value.slice(0, 48) || 'Paragraph',
         }),
-        openTo: line('Open to', 'The last line of the introduction'),
+        openTo: line('Closing line (optional)', 'Shown before “More about me”'),
       },
     }),
     me: singleton({
@@ -54,22 +54,6 @@ export default config({
       schema: {
         rows: fields.array(fields.object({ label: line('Label'), value: line('Value') }), { label: 'What the site is made of', itemLabel: (p) => p.fields.label.value || 'Row' }),
         credits: fields.array(fields.object({ label: line('What'), name: line('Who'), url: fields.url({ label: 'Link' }) }), { label: 'After', itemLabel: (p) => p.fields.label.value || 'Credit' }),
-      },
-    }),
-    gallery: singleton({
-      label: 'Gallery',
-      path: 'content/gallery',
-      schema: {
-        intro: line('Introduction'),
-        items: fields.array(
-          fields.object({
-            image: fields.image({ label: 'Image', directory: 'private/projects/gallery', publicPath: '/media/gallery/' }),
-            title: line('Title'),
-            project: line('Project', 'e.g. tama, kita, or leave empty'),
-            locked: fields.checkbox({ label: 'Under NDA', description: 'Shown blurred until the password is entered', defaultValue: false }),
-          }),
-          { label: 'Images', itemLabel: (p) => p.fields.title.value || 'Image' },
-        ),
       },
     }),
   },
@@ -129,16 +113,6 @@ export default config({
                   fields.object({ src: fields.image({ label: 'Screen', directory: 'private/projects', publicPath: '/media/' }), label: line('Caption') }),
                   { label: 'Screens', itemLabel: (p) => p.fields.label.value || 'Screen' },
                 ) },
-            }),
-            Gallery: block({
-              label: 'Drifting strip',
-              description: 'A strip of screens that drifts on a loop; click one to enlarge it',
-              schema: {
-                items: fields.array(
-                  fields.object({ src: fields.image({ label: 'Screen', directory: 'private/projects', publicPath: '/media/' }), label: line('Caption') }),
-                  { label: 'Screens', itemLabel: (p) => p.fields.label.value || 'Screen' },
-                ),
-              },
             }),
             Locked: block({
               label: 'Password line',

@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
 import { CoinFace } from './CoinFace';
 
 type Grain = { x: number; y: number; hx: number; hy: number; vx: number; vy: number; c: string; s: number; a: number; t0: number; off: number };
-const SAND = ['#e9dcbf', '#dfcca5', '#d2bb8e', '#f3e9d2', '#c3a675', '#b6976a'];
+const SAND = ['#f3e9d2', '#eadbb9', '#e0cda3', '#d3bd8f', '#c5ab78', '#b3986a'];
 const TAU = Math.PI * 2;
 
 export function Coin() {
@@ -25,13 +25,22 @@ export function Coin() {
     let seed = 11; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
     const pick = (r = Math.random()) => SAND[(r * SAND.length) | 0];
 
-    // the bed: sand scattered on the page, thickest around the coin, thinning to nothing
-    for (let i = 0; i < 6500; i++) {
-      const a = rnd() * TAU, d = R * (0.2 + Math.pow(rnd(), 0.7) * 1.05) + (rnd() < 0.2 ? rnd() * 26 : 0);
-      const x = cx + Math.cos(a) * d * 1.04, y = cy + Math.sin(a) * d + 3;
-      const fade = 1 - Math.min(1, Math.max(0, (d - R) / (R * 0.5)));
-      gb.globalAlpha = (0.4 + rnd() * 0.6) * (0.15 + fade * 0.85); gb.fillStyle = pick(rnd());
-      const s = rnd() < 0.15 ? 1.6 : 1.05; gb.fillRect(x, y, s, s);
+    // the bed: a patch of beach on the page. A soft body of sand, then grains over it (pale ones catching light, dark ones in shadow),
+    // thinning to nothing at the edges, with a darker hollow where the coin has sunk in.
+    const body = gb.createRadialGradient(cx, cy + 4, R * 0.4, cx, cy + 4, R * 1.62);
+    body.addColorStop(0, 'rgba(226,209,170,.95)'); body.addColorStop(0.62, 'rgba(228,212,176,.85)'); body.addColorStop(0.85, 'rgba(230,216,184,.35)'); body.addColorStop(1, 'rgba(230,216,184,0)');
+    gb.fillStyle = body; gb.fillRect(0, 0, W, H);
+    const hollow = gb.createRadialGradient(cx - 2, cy - 2, R * 0.9, cx - 2, cy - 2, R * 1.14);
+    hollow.addColorStop(0, 'rgba(92,70,30,.5)'); hollow.addColorStop(1, 'rgba(92,70,30,0)');
+    gb.fillStyle = hollow; gb.fillRect(0, 0, W, H);
+    const TONE = ['#f6ecd6', '#efe2c4', '#e3d2ab', '#d6c093', '#c5ab78', '#a98e5c', '#8f7648'];
+    for (let i = 0; i < 16000; i++) {
+      const a = rnd() * TAU, d = R * (0.85 + Math.pow(rnd(), 0.85) * 0.85);
+      const wob = 1 + 0.07 * Math.sin(a * 3 + 1) + 0.05 * Math.sin(a * 7);
+      const x = cx + Math.cos(a) * d * wob, y = cy + 4 + Math.sin(a) * d * wob;
+      const fade = 1 - Math.min(1, Math.max(0, (d - R * 1.1) / (R * 0.6)));
+      gb.globalAlpha = (0.35 + rnd() * 0.65) * fade; gb.fillStyle = TONE[(Math.pow(rnd(), 1.3) * TONE.length) | 0];
+      const s = rnd() < 0.1 ? 1.8 : rnd() < 0.5 ? 1.2 : 0.9; gb.fillRect(x, y, s, s);
     }
     gb.globalAlpha = 1;
 
@@ -41,9 +50,10 @@ export function Coin() {
       const x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d;
       cover.push({ x, y, hx: x, hy: y, vx: 0, vy: 0, c: pick(rnd()), s: rnd() < 0.18 ? 1.7 : 1.15, a: alpha, t0: 0, off: 0 });
     };
-    for (let i = 0; i < 1500; i++) add(2.25 + (rnd() + rnd() - 1) * 1.15, R * (0.5 + Math.pow(rnd(), 0.6) * 0.62), 0.75 + rnd() * 0.25);
-    for (let i = 0; i < 700; i++) add(rnd() * TAU, R * (0.9 + rnd() * 0.2), 0.6 + rnd() * 0.4);
-    for (let i = 0; i < 260; i++) add(rnd() * TAU, R * Math.sqrt(rnd()) * 0.9, 0.5 + rnd() * 0.4);
+    for (let i = 0; i < 2200; i++) add(2.25 + (rnd() + rnd() - 1) * 1.25, R * (0.42 + Math.pow(rnd(), 0.6) * 0.7), 0.75 + rnd() * 0.25);
+    for (let i = 0; i < 700; i++) add(5.6 + (rnd() + rnd() - 1) * 0.7, R * (0.78 + rnd() * 0.32), 0.7 + rnd() * 0.3);
+    for (let i = 0; i < 1100; i++) add(rnd() * TAU, R * (0.9 + rnd() * 0.2), 0.6 + rnd() * 0.4);
+    for (let i = 0; i < 420; i++) add(rnd() * TAU, R * Math.sqrt(rnd()) * 0.9, 0.45 + rnd() * 0.4);
 
     let up = 0, vu = 0, tu = 0, rx = 0, ry = 0, trx = 0, tTilt = 0, base = 0, vrx = 0, vry = 0;
     let hover = false, raf = 0, mode: 'rest' | 'shed' | 'back' = 'rest', backAt = 0, puffed = true;
@@ -53,8 +63,11 @@ export function Coin() {
     const drawDrift = (alpha: number) => {
       if (alpha <= 0) return;
       const g = gd.createRadialGradient(ax, ay, 0, ax, ay, R * 0.78);
-      g.addColorStop(0, 'rgba(226,210,172,.98)'); g.addColorStop(0.55, 'rgba(226,210,172,.9)'); g.addColorStop(1, 'rgba(226,210,172,0)');
+      g.addColorStop(0, 'rgba(227,211,174,1)'); g.addColorStop(0.6, 'rgba(227,211,174,.96)'); g.addColorStop(1, 'rgba(227,211,174,0)');
       gd.globalAlpha = alpha; gd.fillStyle = g; gd.fillRect(ax - R, ay - R, R * 2, R * 2);
+      const bx = cx + Math.cos(5.6) * R * 1.02, by = cy + Math.sin(5.6) * R * 1.02, g2 = gd.createRadialGradient(bx, by, 0, bx, by, R * 0.42);
+      g2.addColorStop(0, 'rgba(227,211,174,1)'); g2.addColorStop(0.55, 'rgba(227,211,174,.9)'); g2.addColorStop(1, 'rgba(227,211,174,0)');
+      gd.fillStyle = g2; gd.fillRect(bx - R, by - R, R * 2, R * 2);
     };
     let shedAt = 0;
     const drawCover = (alpha: number) => { drawDrift(alpha); for (const g of cover) { gd.globalAlpha = g.a * alpha; gd.fillStyle = g.c; gd.fillRect(g.hx, g.hy, g.s, g.s); } };
@@ -134,7 +147,7 @@ export function Coin() {
       <div className="coin-tone">
         <canvas className="sand bed" ref={bed} aria-hidden="true" />
         <span className="coin-shade" aria-hidden="true" />
-        <button type="button" className="coin" ref={coinRef} aria-label="One Timi, a coin of my own currency with my portrait on it, lying in sand. Press to turn it over.">
+        <button type="button" className="coin" ref={coinRef} aria-label="One Timi, a coin of my own currency with my portrait struck on it, lying in sand. Press to turn it over.">
           <span className="coin-body">
             {layers.map((z) => <span key={z} className="coin-edge" style={{ ['--z' as string]: `${z * 0.5}px` }} />)}
             {(['front', 'back'] as const).map((side) => (

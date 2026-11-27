@@ -2,7 +2,7 @@
 import { usePathname } from 'next/navigation';
 
 const items = [
-  { href: '/', label: 'Highlights', match: (p: string) => p === '/' || p.startsWith('/work') || p.startsWith('/gallery') },
+  { href: '/', label: 'Highlights', match: (p: string) => p === '/' || p.startsWith('/work') },
   { href: '/me', label: 'Me', match: (p: string) => p.startsWith('/me') },
   { href: '/kit', label: 'Kit', match: (p: string) => p.startsWith('/kit') },
 ];

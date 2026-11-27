@@ -1,7 +1,6 @@
 import Markdoc, { type RenderableTreeNodes } from '@markdoc/markdoc';
 import React from 'react';
 import { Icon } from './Icon';
-import { Gallery } from './Gallery';
 import { Loop } from './Loop';
 
 type Step = { phase?: string; stage: string; who: string; what: string; sendsBack?: boolean };
@@ -59,5 +58,5 @@ function Modules({ items = [] }: { items: { name: string; description: string }[
 export function Prose({ content }: { content: RenderableTreeNodes }) {
   // drop Markdoc's wrapping <article> so each paragraph, heading and figure reveals on its own
   const nodes = Markdoc.Tag.isTag(content) && content.name === 'article' ? content.children : content;
-  return <>{Markdoc.renderers.react(nodes, React, { components: { Figure, Steps, Stats, Modules, Gallery, Loop, Locked: () => null } })}</>;
+  return <>{Markdoc.renderers.react(nodes, React, { components: { Figure, Steps, Stats, Modules, Loop, Locked: () => null } })}</>;
 }

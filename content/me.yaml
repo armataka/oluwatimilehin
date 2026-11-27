@@ -12,7 +12,5 @@ playbook:
     text: When TAMA’s client asked for a different colour after approving the demos, the interface guidelines meant updating styles, not redrawing screens.
 offTheClock: "When I’m not designing, I’m watching sport: Chelsea, Formula 1 (I’m a Hamilton fan), the NFL, the NBA, tennis and Shohei Ohtani. I read comics, fiction and non-fiction, and I’m learning the guitar."
 rightNow:
-  - label: Open to
-    value: Senior product design roles, remote or in Lagos
   - label: Learning
     value: The guitar

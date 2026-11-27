@@ -37,7 +37,6 @@ export const markdocConfig = {
     Modules: { render: 'Modules', selfClosing: true, attributes: { items: { type: Array } } },
     Locked: { render: 'Locked', selfClosing: true, attributes: {} },
     Loop: { render: 'Loop', selfClosing: true, attributes: { items: { type: Array } } },
-    Gallery: { render: 'Gallery', selfClosing: true, attributes: { items: { type: Array } } },
   },
 };
 

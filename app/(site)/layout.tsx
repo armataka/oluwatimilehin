@@ -7,7 +7,6 @@ import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Runtime } from '@/components/Runtime';
 import { Sound } from '@/components/Sound';
-import { Eggs } from '@/components/Eggs';
 import { CoinFace } from '@/components/CoinFace';
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -16,15 +15,17 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: `:root{--spring:${sp.css};--spring-ms:${sp.ms}ms}` }} />
+      {/* first visit: a line is drawn round a dark disc, an ember at its head; when it closes the circle, the coin takes its place */}
       <div className="loader" aria-hidden="true">
-        {/* first visit: the coin is tossed, the name is said syllable by syllable as it turns, and it lands */}
-        <div className="ld-coin"><span className="ld-spin">
-          <span className="coin-face front"><CoinFace side="front" idp="ld" /></span>
-          <span className="coin-face back"><CoinFace side="back" idp="ld" /></span>
-        </span></div>
-        <span className="ld-shadow" />
-        <p className="ld-say">{site.say.split('-').map((x, i) => <span key={i} style={{ ['--i' as string]: i }}>{x}</span>)}</p>
-        <p className="ld-name">{site.first}</p>
+        <div className="ld">
+          <svg viewBox="-14 -14 128 128">
+            <circle className="ld-disc" cx="50" cy="50" r="46" />
+            <circle className="ld-line" cx="50" cy="50" r="50" pathLength="1" />
+            <g className="ld-orbit"><circle className="ld-ember" cx="50" cy="0" r="2.6" /></g>
+            <circle className="ld-flash" cx="50" cy="50" r="50" />
+          </svg>
+          <div className="ld-coin"><CoinFace side="front" idp="ld" /></div>
+        </div>
       </div>
       <div className="sheet">
         <div className="frame">
@@ -33,19 +34,12 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
             <Nav />
           </header>
           {children}
-          {/* the ask, at the end of every page */}
-          <aside className="cta" aria-label="Get in touch" data-r>
-            <p className="cta-k">Hiring a senior product designer?</p>
-            <p className="cta-h">I’m open to senior roles, remote or in Lagos. Tell me what you’re building.</p>
-            <p className="cta-a"><a className="btn" href={`mailto:${site.email}?subject=${encodeURIComponent('A product design role')}`}>Email me</a><a className="btn ghost" href={site.resume}>Read my résumé</a></p>
-          </aside>
         </div>
       </div>
       <Footer />
       <div className="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged image"><img alt="" id="lb-img" /></div>
       <Runtime />
       <Sound />
-      <Eggs />
     </>
   );
 }
