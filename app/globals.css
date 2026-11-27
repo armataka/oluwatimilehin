@@ -316,8 +316,12 @@
 .coin-tone { position: absolute; inset: 0; perspective: 800px }
 /* the coin is grey until you point at it; the sand is always sand */
 /* dulled by sand and salt at rest; it gleams once it's lifted (on the faces, so the coin keeps its two sides) */
-.coin-face .coin-svg { filter: saturate(.7) brightness(.9); transition: filter .9s var(--out) }
-.coin-scene.up .coin-face .coin-svg { filter: saturate(1.05) brightness(1.04) }
+.coin-face .coin-svg { transition: filter .9s var(--out) }
+.coin-scene.up .coin-face .coin-svg { filter: saturate(1.12) brightness(1.08) contrast(1.04) }
+.sand.buried { z-index: 3; transition: opacity .7s var(--out) .15s }
+.coin-scene.up .sand.buried { opacity: 0; transition: opacity .28s linear }
+.coin-scene:not(.up) .coin { opacity: 0; transition: opacity .2s linear .6s }
+.coin-scene.up .coin { opacity: 1; transition: none }
 .sand { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none }
 .sand.bed { z-index: 0 } .sand.dust { z-index: 3; transform: translateY(calc(var(--up) * -7px)) scale(calc(1 + var(--up) * .1)) }
 .coin { all: unset; position: absolute; left: calc(50% - 75px); top: calc(50% - 75px); width: 150px; height: 150px; border-radius: 50%; z-index: 2; cursor: pointer; -webkit-tap-highlight-color: transparent; --rx: 0deg; --ry: 0deg; --hx: 50%; transform: translateY(calc(var(--up) * -7px)) scale(calc(1 + var(--up) * .1)) }
@@ -332,7 +336,7 @@
 .coin-small { font: 700 10px/1 Georgia, serif; letter-spacing: .2em; text-anchor: middle }
 .coin-tiny { font: 700 9px/1 Georgia, serif; letter-spacing: .14em; text-anchor: middle }
 .coin-holo { position: absolute; inset: 0; border-radius: 50%; background: linear-gradient(115deg, transparent 25%, rgb(255 120 200 / .35) 38%, rgb(120 230 255 / .35) 47%, rgb(200 255 140 / .3) 56%, rgb(255 220 120 / .3) 64%, transparent 76%) var(--hx) 50% / 300% 100% no-repeat; mix-blend-mode: screen; opacity: 0; transition: opacity .6s var(--out); pointer-events: none }
-.coin-scene.up .coin-holo { opacity: .22 }
+.coin-scene.up .coin-holo { opacity: .12 }
 /* pressed into the sand at rest; a soft shadow thrown down and to the right once it's lifted */
 .coin-shade { position: absolute; z-index: 1; left: calc(50% - 75px); top: calc(50% - 75px); width: 150px; height: 150px; border-radius: 50%; background: rgb(40 28 8 / calc(.5 - var(--up) * .22)); filter: blur(calc(2px + var(--up) * 12px)); transform: translate(calc(var(--up) * 7px), calc(1px + var(--up) * 20px)) scale(calc(1.01 + var(--up) * .02)) }
 .coin-hint { position: absolute; left: 0; right: 0; bottom: 0; text-align: center; white-space: nowrap; font: 500 10px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); opacity: 0; transition: opacity .4s var(--out) }
