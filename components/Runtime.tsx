@@ -1,5 +1,5 @@
 'use client';
-// Page-wide behaviour: smooth scrolling, the blur-in reveal, the Lagos clock, the image lightbox and the first-visit loader.
+// Page-wide behaviour: smooth scrolling, the blur-in reveal, the Lagos clock, the image lightbox and the loader (on arrival and on every reload).
 import { useEffect } from 'react';
 import Lenis from 'lenis';
 
@@ -45,7 +45,6 @@ export function Runtime() {
     let started = false;
     const start = () => { started = true; watch(); };
     if (loading) {
-      try { sessionStorage.setItem('seen', '1'); } catch {}
       const t = setTimeout(() => root.classList.remove('loading'), 2800);
       off.push(() => clearTimeout(t));
     }

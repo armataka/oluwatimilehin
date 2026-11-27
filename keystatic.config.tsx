@@ -17,6 +17,7 @@ export default config({
       path: 'content/site',
       schema: {
         name: line('Full name'),
+        brand: line('Logo', 'The short name at the top left, e.g. Timi'),
         first: line('First name'),
         say: line('How to say it', 'Syllables joined with hyphens, e.g. oh-loo-wah'),
         meaning: line('What the name means'),

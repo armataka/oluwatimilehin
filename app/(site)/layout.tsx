@@ -15,7 +15,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: `:root{--spring:${sp.css};--spring-ms:${sp.ms}ms}` }} />
-      {/* first visit: a white line is drawn round a dark disc, an ember at its head; when it closes the circle, the coin takes its place.
+      {/* on arrival and on every reload (not between pages of the site): a white line is drawn round a dark disc, an ember at its head; when it closes the circle, the coin takes its place.
           The line and the ember share one SMIL timeline so the ember never runs ahead of the line. */}
       <div className="loader" aria-hidden="true">
         <div className="ld">
@@ -36,7 +36,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <div className="sheet">
         <div className="frame">
           <header className="top">
-            <a className="brand" href="/">{site.name}</a>
+            <a className="brand" href="/" aria-label={`${site.name}, home`}>{site.brand || site.name}</a>
             <Nav />
           </header>
           {children}

@@ -10,14 +10,16 @@ import { Gate } from '@/components/Gate';
 
 type Props = { params: Promise<{ slug: string }> };
 
-// "Built; rolls out next audit cycle" -> a chip for the state, then the detail
+const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+
+// "Built; rolls out next audit cycle" -> a chip for the state, then the detail (as its own sentence)
 function Status({ value }: { value: string }) {
   const [state, ...rest] = value.split(/;\s*/);
   const kind = /live|shipped|launched/i.test(state) ? 'live' : /built|ready|done/i.test(state) ? 'built' : /progress|build|design/i.test(state) ? 'wip' : 'past';
   return (
     <>
       <span className={`chip ${kind}`}><i aria-hidden="true" />{state}</span>
-      {rest.length ? <span className="chip-note">{rest.join('; ')}</span> : null}
+      {rest.length ? <span className="chip-note">{cap(rest.join('; '))}</span> : null}
     </>
   );
 }
@@ -35,8 +37,8 @@ export default async function Project({ params }: Props) {
   const i = all.findIndex((x) => x.slug === slug);
   if (i < 0) notFound();
   const p = all[i];
-  const prev = all[(i - 1 + all.length) % all.length];
-  const next = all[(i + 1) % all.length];
+  const prev = i > 0 ? all[i - 1] : null;
+  const next = i < all.length - 1 ? all[i + 1] : null;
 
   const t = token();
   const open = !p.locked || (!!t && (await cookies()).get(COOKIE)?.value === t);
@@ -68,14 +70,18 @@ export default async function Project({ params }: Props) {
           {gated ? <Gate slug={slug} sections={sections} /> : <Prose content={priv} />}
         </div>
         <nav className="pn" aria-label="More projects" data-r>
-          <a className="pv" href={`/work/${prev.slug}`}>
-            <span className="s3">Previous</span>
-            <span className="pn-r"><Thumb kind={prev.thumb} src={prev.thumbnail} /><span><span className="w5 nt">{prev.name}</span><br /><span className="s2">{prev.line}</span></span></span>
-          </a>
-          <a className="nx" href={`/work/${next.slug}`}>
-            <span className="s3">Next</span>
-            <span className="pn-r"><span><span className="w5 nt">{next.name}</span><br /><span className="s2">{next.line}</span></span><Thumb kind={next.thumb} src={next.thumbnail} /></span>
-          </a>
+          {prev ? (
+            <a className="pv" href={`/work/${prev.slug}`}>
+              <span className="s3">Previous</span>
+              <span className="pn-r"><Thumb kind={prev.thumb} src={prev.thumbnail} /><span><span className="w5 nt">{prev.name}</span><br /><span className="s2">{prev.line}</span></span></span>
+            </a>
+          ) : <span />}
+          {next ? (
+            <a className="nx" href={`/work/${next.slug}`}>
+              <span className="s3">Next</span>
+              <span className="pn-r"><span><span className="w5 nt">{next.name}</span><br /><span className="s2">{next.line}</span></span><Thumb kind={next.thumb} src={next.thumbnail} /></span>
+            </a>
+          ) : null}
         </nav>
       </article>
     </>
