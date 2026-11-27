@@ -90,12 +90,13 @@ export default config({
         summary: fields.array(para('Paragraph'), { label: 'Summary (always public)', itemLabel: (p) => p.value.slice(0, 48) || 'Paragraph' }),
         body: fields.markdoc({
           label: 'Case study',
-          options: { image: { directory: 'public/images/projects', publicPath: '/images/projects/' } },
+          // case-study images go to /private and are served through /media, so locked ones stay behind the password
+          options: { image: { directory: 'private/projects', publicPath: '/media/' } },
           components: {
             Figure: block({
               label: 'Screen',
               schema: {
-                src: fields.image({ label: 'Image', directory: 'public/images/projects', publicPath: '/images/projects/' }),
+                src: fields.image({ label: 'Image', directory: 'private/projects', publicPath: '/media/' }),
                 label: line('Placeholder label', 'Shown until an image is added'),
                 caption: line('Caption'),
                 ratio: fields.select({ label: 'Shape', options: [{ label: '16:10', value: '16 / 10' }, { label: '21:9', value: '21 / 9' }, { label: '4:3', value: '4 / 3' }], defaultValue: '16 / 10' }),
