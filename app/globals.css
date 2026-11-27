@@ -229,14 +229,17 @@
   .pron:hover .spk, .pron.play .spk { opacity: 1; transform: none }
 
 
-  .thumb { flex: none; width: 80px; height: 56px; border-radius: 5px; display: grid; grid-template-columns: 10px 1fr; grid-template-rows: 8px 1fr 6px; gap: 3px; padding: 4px; overflow: hidden; box-shadow: 0 0 0 1px light-dark(rgb(0 0 0 / .06), rgb(255 255 255 / .07)), 0 1px 1px -.5px rgb(0 0 0 / .06), 0 3px 3px -1.5px rgb(0 0 0 / .06), 0 6px 6px -3px rgb(0 0 0 / .05); transition: transform .5s var(--out) }
-  .thumb i { border-radius: 1.5px }
-  .thumb i:nth-child(1) { grid-row: 1 / 4 }
-  .thumb i:nth-child(3) { grid-column: 2 }
-  .thumb i:nth-child(4) { grid-column: 2; grid-row: 3 }
-  .thumb.tama { background: #f3f6f2 } .thumb.tama i:nth-child(1) { background: #1f6b47 } .thumb.tama i:nth-child(2) { background: #d7e6db } .thumb.tama i:nth-child(3) { background: #fff } .thumb.tama i:nth-child(4) { background: #e7efe9 }
-  .thumb.kita { background: #f2f3f7 } .thumb.kita i:nth-child(1) { background: #151a3a } .thumb.kita i:nth-child(2) { background: #dde0f2 } .thumb.kita i:nth-child(3) { background: #fff } .thumb.kita i:nth-child(4) { background: #e9ebf6 }
-  .thumb.brydge { background: #f3f5f2 } .thumb.brydge i:nth-child(1) { background: #fff; box-shadow: 0 0 0 1px #e3e7e1 } .thumb.brydge i:nth-child(2) { background: #57b36b } .thumb.brydge i:nth-child(3) { background: #fff } .thumb.brydge i:nth-child(4) { background: #e5f2e8 }
+  /* project thumbnails: the product's mark on a soft gradient in its colours */
+  .thumb { position: relative; flex: none; width: 80px; height: 56px; border-radius: 6px; overflow: hidden; display: grid; place-items: center; color: #fff; box-shadow: 0 0 0 1px light-dark(rgb(0 0 0 / .06), rgb(255 255 255 / .08)), 0 1px 1px -.5px rgb(0 0 0 / .06), 0 3px 3px -1.5px rgb(0 0 0 / .06), 0 6px 6px -3px rgb(0 0 0 / .05); transition: transform .5s var(--out) }
+  .thumb.art::after { content: ''; position: absolute; inset: 0; background: radial-gradient(120% 90% at 20% 0%, rgb(255 255 255 / .22), transparent 55%); pointer-events: none }
+  .thumb svg { position: relative; z-index: 1; width: 44%; height: auto; fill: currentColor; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .18)); transition: transform .6s var(--out) }
+  .thumb .wm { position: relative; z-index: 1; font: 600 11px/1 var(--sans); letter-spacing: -.02em; text-shadow: 0 1px 2px rgb(0 0 0 / .15) }
+  a:hover .thumb svg { transform: scale(1.06) }
+  .thumb.tama { background: radial-gradient(90% 120% at 100% 100%, #9be2b4 0%, transparent 55%), radial-gradient(80% 110% at 0% 100%, #0b3524 0%, transparent 60%), linear-gradient(135deg, #165a3b 0%, #1f7a4f 55%, #3fa36c 100%) }
+  .thumb.tama svg { width: 50% }
+  .thumb.kita { background: radial-gradient(90% 120% at 15% 110%, #8b7cf6 0%, transparent 55%), radial-gradient(70% 90% at 100% 0%, #191347 0%, transparent 65%), linear-gradient(140deg, #2a1f7a 0%, #4b3fe0 60%, #6d5ff2 100%) }
+  .thumb.kita svg { width: 32% }
+  .thumb.brydge { background: radial-gradient(90% 120% at 0% 0%, #d9f99d 0%, transparent 50%), radial-gradient(80% 110% at 100% 100%, #0f766e 0%, transparent 60%), linear-gradient(135deg, #3fae6a 0%, #2c9a72 60%, #1d7f6b 100%) }
   a:hover .thumb { transform: translateY(-2px) }
   @media (max-width: 480px) { .thumb { width: 60px; height: 42px } }
 

@@ -1,19 +1,15 @@
 import { config, fields, collection, singleton } from '@keystatic/core';
 import { block } from '@keystatic/core/content-components';
 
-// Local editing in development. On the live site, edits save to GitHub, but only once the GitHub app
-// has been set up (its public slug is the sign): until then the site stays on local mode, so a half-finished
-// setup can't break the build. See README.
-const storage =
-  process.env.NEXT_PUBLIC_KEYSTATIC_STORAGE === 'github' && process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG
-    ? ({ kind: 'github', repo: 'armataka/oluwatimilehin' } as const)
-    : ({ kind: 'local' } as const);
+// Local editing in development; on the live site, Keystatic Cloud signs you in with GitHub and commits your edits.
+const storage = process.env.NODE_ENV === 'production' ? ({ kind: 'cloud' } as const) : ({ kind: 'local' } as const);
 
 const line = (label: string, description?: string) => fields.text({ label, description });
 const para = (label: string, description?: string) => fields.text({ label, description, multiline: true });
 
 export default config({
   storage,
+  cloud: { project: 'oluwatimilehin/oluwatimilehin-site' },
   ui: { brand: { name: 'Oluwatimilehin' } },
   singletons: {
     site: singleton({
@@ -76,11 +72,11 @@ export default config({
         year: line('Year', 'e.g. 2025–26'),
         locked: fields.checkbox({ label: 'Locked (NDA)', description: 'Only the summary is public; the rest needs the password', defaultValue: false }),
         thumb: fields.select({
-          label: 'Thumbnail style',
+          label: 'Thumbnail colours and mark',
           options: [
-            { label: 'Green sidebar (TAMA)', value: 'tama' },
-            { label: 'Navy sidebar (Kita)', value: 'kita' },
-            { label: 'Light with green bar (Brydge)', value: 'brydge' },
+            { label: 'TAMA (green)', value: 'tama' },
+            { label: 'Kita (indigo)', value: 'kita' },
+            { label: 'Brydge (teal)', value: 'brydge' },
           ],
           defaultValue: 'tama',
         }),

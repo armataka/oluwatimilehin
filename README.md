@@ -23,7 +23,8 @@ Locally, any password opens the locked case studies until you set `CASE_PASSWORD
 | Me page, including the playbook | `content/me.yaml` (Me) |
 | Kit page and credits | `content/kit.yaml` (Kit) |
 | Case studies | `content/projects/*.mdoc` (Projects) |
-| Screens and thumbnails | `public/images/` (uploaded through Keystatic) |
+| Case-study screens | `private/projects/<project>/` (only sent after the password) |
+| Thumbnails (gradient + mark) | `components/Thumb.tsx`, colours in `app/globals.css` |
 | Stickers (Me page only) | `lib/stickers.js` |
 | Styles | `app/globals.css` |
 
@@ -37,11 +38,9 @@ In a case study, the opening paragraph and the summary are always public. If **L
 
 ## Edit on the live site
 
-1. In Vercel, add `NEXT_PUBLIC_KEYSTATIC_STORAGE=github` and redeploy.
-2. Open `https://oluwatimilehin.me/keystatic`. Keystatic walks you through creating a GitHub app; when it finishes it gives you four values.
-3. Add those four (`KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`, `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`) to Vercel and redeploy.
+Go to `https://<your site>/keystatic` and sign in with Keystatic Cloud (GitHub). Saving commits to this repo, and Vercel republishes in about a minute. The site's address must be listed under Project URLs in the Keystatic Cloud project settings (project `oluwatimilehin/oluwatimilehin-site`).
 
-From then on, saving in `/keystatic` commits to the repo and Vercel republishes in about a minute.
+When you run the site on your own computer (`npm run dev`), `/keystatic` edits the files directly instead.
 
 ## Credits
 
