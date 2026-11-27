@@ -1,18 +1,19 @@
 'use client';
-// One Timi, lying flat on the page with sand drifted over it: the sand is the surface of the site.
-// The coin and the sand are Blender renders (tools/coin); the falling grains are drawn live.
+// One Timi, lying flat on the page with sand drifted over it: the sand is the surface of the site, the same colour as the page.
 // Point at it and it lifts towards you in full colour, the sand sliding off its face; leave, and it drops
 // back with a puff and the sand settles over it again. Tap to turn it over.
 import { useEffect, useRef } from 'react';
 import { CoinFace } from './CoinFace';
 
 type Grain = { x: number; y: number; hx: number; hy: number; vx: number; vy: number; c: string; s: number; a: number; t0: number; off: number };
-const SAND = ['#f3e9d2', '#eadbb9', '#e0cda3', '#d3bd8f', '#c5ab78', '#b3986a'];
+let SAND: string[] = [];
+let BODY = '255,255,255';
 const TAU = Math.PI * 2;
 
 export function Coin() {
   const scene = useRef<HTMLDivElement>(null);
   const coinRef = useRef<HTMLButtonElement>(null);
+  const bed = useRef<HTMLCanvasElement>(null);
   const dust = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -21,9 +22,29 @@ export function Coin() {
     const W = el.clientWidth, H = el.clientHeight, dpr = Math.min(2, devicePixelRatio || 1);
     const R = coin.offsetWidth / 2, cx = W / 2, cy = H / 2;
     const setup = (cv: HTMLCanvasElement) => { cv.width = W * dpr; cv.height = H * dpr; const g = cv.getContext('2d')!; g.scale(dpr, dpr); return g; };
-    const gd = setup(dust.current!);
+    const gb = setup(bed.current!), gd = setup(dust.current!);
     let seed = 11; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
     const pick = (r = Math.random()) => SAND[(r * SAND.length) | 0];
+
+    // the sand takes the page's own colour: its body is the page, its grains a shade lighter or darker, like light on grains
+    const tone = () => {
+      const m = (getComputedStyle(el.closest('.sheet') || document.body).backgroundColor.match(/\d+/g) || ['255', '255', '255']).slice(0, 3).map(Number);
+      const dark = m[0] < 128, sh = (k: number) => `rgb(${m.map((v) => Math.max(0, Math.min(255, Math.round(v + k)))).join(',')})`;
+      BODY = m.join(',');
+      SAND = dark ? [sh(0), sh(6), sh(12), sh(20), sh(-4), sh(30)] : [sh(0), sh(-6), sh(-12), sh(-20), sh(-28), sh(0)];
+    };
+    tone();
+    // the bed: sand scattered on the page, thickest around the coin, thinning to nothing
+    const drawBed = () => { gb.clearRect(0, 0, W, H); seed = 11;
+    for (let i = 0; i < 6500; i++) {
+      const a = rnd() * TAU, d = R * (0.2 + Math.pow(rnd(), 0.7) * 1.05) + (rnd() < 0.2 ? rnd() * 26 : 0);
+      const x = cx + Math.cos(a) * d * 1.04, y = cy + Math.sin(a) * d + 3;
+      const fade = 1 - Math.min(1, Math.max(0, (d - R) / (R * 0.5)));
+      gb.globalAlpha = (0.4 + rnd() * 0.6) * (0.15 + fade * 0.85); gb.fillStyle = pick(rnd());
+      const s = rnd() < 0.15 ? 1.6 : 1.05; gb.fillRect(x, y, s, s);
+    }
+    gb.globalAlpha = 1; };
+    drawBed();
 
     // the cover: a drift across the lower left, a thin ring over the rim, and a scatter across the face
     const cover: Grain[] = [];
@@ -31,15 +52,23 @@ export function Coin() {
       const x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d;
       cover.push({ x, y, hx: x, hy: y, vx: 0, vy: 0, c: pick(rnd()), s: rnd() < 0.18 ? 1.7 : 1.15, a: alpha, t0: 0, off: 0 });
     };
-    for (let i = 0; i < 2200; i++) add(2.25 + (rnd() + rnd() - 1) * 1.25, R * (0.42 + Math.pow(rnd(), 0.6) * 0.7), 0.75 + rnd() * 0.25);
-    for (let i = 0; i < 700; i++) add(5.6 + (rnd() + rnd() - 1) * 0.7, R * (0.78 + rnd() * 0.32), 0.7 + rnd() * 0.3);
-    for (let i = 0; i < 1100; i++) add(rnd() * TAU, R * (0.9 + rnd() * 0.2), 0.6 + rnd() * 0.4);
-    for (let i = 0; i < 420; i++) add(rnd() * TAU, R * Math.sqrt(rnd()) * 0.9, 0.45 + rnd() * 0.4);
+    for (let i = 0; i < 1500; i++) add(2.25 + (rnd() + rnd() - 1) * 1.15, R * (0.5 + Math.pow(rnd(), 0.6) * 0.62), 0.75 + rnd() * 0.25);
+    for (let i = 0; i < 700; i++) add(rnd() * TAU, R * (0.9 + rnd() * 0.2), 0.6 + rnd() * 0.4);
+    for (let i = 0; i < 260; i++) add(rnd() * TAU, R * Math.sqrt(rnd()) * 0.9, 0.5 + rnd() * 0.4);
 
     let up = 0, vu = 0, tu = 0, rx = 0, ry = 0, trx = 0, tTilt = 0, base = 0, vrx = 0, vry = 0;
     let hover = false, raf = 0, mode: 'rest' | 'shed' | 'back' = 'rest', backAt = 0, puffed = true;
     const puff: Grain[] = [];
+    // the body of the drift: a soft heap under the loose grains, so it reads as sand lying over the coin
+    const ax = cx + Math.cos(2.25) * R * 0.9, ay = cy + Math.sin(2.25) * R * 0.9;
+    const drawDrift = (alpha: number) => {
+      if (alpha <= 0) return;
+      const g = gd.createRadialGradient(ax, ay, 0, ax, ay, R * 0.78);
+      g.addColorStop(0, `rgba(${BODY},.98)`); g.addColorStop(0.55, `rgba(${BODY},.9)`); g.addColorStop(1, `rgba(${BODY},0)`);
+      gd.globalAlpha = alpha; gd.fillStyle = g; gd.fillRect(ax - R, ay - R, R * 2, R * 2);
+    };
     let shedAt = 0;
+    const drawCover = (alpha: number) => { drawDrift(alpha); for (const g of cover) { gd.globalAlpha = g.a * alpha; gd.fillStyle = g.c; gd.fillRect(g.hx, g.hy, g.s, g.s); } };
     const paint = () => {
       el.style.setProperty('--up', up.toFixed(3));
       coin.style.setProperty('--rx', `${rx.toFixed(2)}deg`); coin.style.setProperty('--ry', `${ry.toFixed(2)}deg`);
@@ -53,7 +82,7 @@ export function Coin() {
       gd.clearRect(0, 0, W, H);
       let live = 0;
       if (mode === 'shed') {
-        const edge = R * 1.12;
+        const edge = R * 1.12; drawDrift(1 - (t - shedAt) / 320);
         for (const g of cover) {
           if (t < g.t0) { gd.globalAlpha = g.a; gd.fillStyle = g.c; gd.fillRect(g.x, g.y, g.s, g.s); live++; continue; }
           if (g.a <= 0) continue;
@@ -63,8 +92,8 @@ export function Coin() {
           gd.globalAlpha = Math.max(0, g.a); gd.fillStyle = g.c; gd.fillRect(g.x, g.y, g.s * (g.off ? 0.85 : 1), g.s * (g.off ? 0.85 : 1)); live++;
         }
       } else if (mode === 'back') {
-        if (t - backAt < 700) live++; else mode = 'rest';
-      }
+        const k = Math.min(1, (t - backAt) / 700); drawCover(k); if (k < 1) live++; else mode = 'rest';
+      } else drawCover(1);
       if (!hover && !puffed && up < 0.08) {           // it lands: a ring of sand jumps outwards, then the cover drifts back
         puffed = true; mode = 'back'; backAt = t; live++;
         if (!still) for (let i = 0; i < 90; i++) { const a = Math.random() * TAU, sp = 0.8 + Math.random() * 2.2; puff.push({ x: cx + Math.cos(a) * R, y: cy + Math.sin(a) * R, hx: 0, hy: 0, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, c: pick(), s: Math.random() < 0.25 ? 1.7 : 1.1, a: 1, t0: 0, off: 0 }); }
@@ -101,8 +130,13 @@ export function Coin() {
     coin.addEventListener('pointerenter', enter); coin.addEventListener('pointerleave', leave);
     coin.addEventListener('pointermove', move); coin.addEventListener('click', flip); coin.addEventListener('keydown', key);
     coin.addEventListener('focus', enter); coin.addEventListener('blur', leave);
-    paint();
+    drawCover(1); paint();
+    // the theme can change under it: retint the sand
+    const retint = () => { tone(); for (const g of cover) g.c = pick(rnd()); drawBed(); if (!hover) { gd.clearRect(0, 0, W, H); drawCover(1); } };
+    const mo = new MutationObserver(retint); mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    const mq = matchMedia('(prefers-color-scheme: dark)'); mq.addEventListener('change', retint);
     return () => {
+      mo.disconnect(); mq.removeEventListener('change', retint);
       cancelAnimationFrame(raf);
       coin.removeEventListener('pointerenter', enter); coin.removeEventListener('pointerleave', leave);
       coin.removeEventListener('pointermove', move); coin.removeEventListener('click', flip); coin.removeEventListener('keydown', key);
@@ -114,10 +148,9 @@ export function Coin() {
   return (
     <div className="coin-scene" ref={scene} data-r>
       <div className="coin-tone">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="sand bed" src="/coin/bed.webp" alt="" draggable={false} />
+        <canvas className="sand bed" ref={bed} aria-hidden="true" />
         <span className="coin-shade" aria-hidden="true" />
-        <button type="button" className="coin" ref={coinRef} aria-label="One Timi, a coin of my own currency with my portrait struck on it, lying in sand. Press to turn it over.">
+        <button type="button" className="coin" ref={coinRef} aria-label="One Timi, a coin of my own currency with my portrait on it, lying in sand. Press to turn it over.">
           <span className="coin-body">
             {layers.map((z) => <span key={z} className="coin-edge" style={{ ['--z' as string]: `${z * 0.5}px` }} />)}
             {(['front', 'back'] as const).map((side) => (
@@ -125,8 +158,6 @@ export function Coin() {
             ))}
           </span>
         </button>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="sand buried" src="/coin/buried.webp" alt="" draggable={false} />
         <canvas className="sand dust" ref={dust} aria-hidden="true" />
       </div>
       <span className="coin-hint" aria-hidden="true">Tap to turn it over</span>
