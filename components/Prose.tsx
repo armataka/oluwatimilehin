@@ -57,5 +57,5 @@ function Modules({ items = [] }: { items: { name: string; description: string }[
 export function Prose({ content }: { content: RenderableTreeNodes }) {
   // drop Markdoc's wrapping <article> so each paragraph, heading and figure reveals on its own
   const nodes = Markdoc.Tag.isTag(content) && content.name === 'article' ? content.children : content;
-  return <>{Markdoc.renderers.react(nodes, React, { components: { Figure, Steps, Stats, Modules } })}</>;
+  return <>{Markdoc.renderers.react(nodes, React, { components: { Figure, Steps, Stats, Modules, Locked: () => null } })}</>;
 }

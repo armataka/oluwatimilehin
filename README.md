@@ -28,7 +28,7 @@ Locally, any password opens the locked case studies until you set `CASE_PASSWORD
 | Stickers (Me page only) | `lib/stickers.js` |
 | Styles | `app/globals.css` |
 
-In a case study, the opening paragraph and the summary are always public. If **Locked (NDA)** is ticked, everything in the body stays on the server until the visitor enters the password. Inside the body you can insert four blocks from the editor's **+** menu: **Screen** (an image or placeholder), **Steps** (the audit chain), **Figures** and **Modules**.
+A case study is one document. If **Locked (NDA)** is ticked, everything above the **Password line** block is public and everything below it stays on the server until the visitor enters the password. The first paragraph is shown larger, as the opening. Inside the body you can insert five blocks: **Password line**, from the editor's **+** menu: **Screen** (an image or placeholder), **Steps** (the audit chain), **Figures** and **Modules**.
 
 ## Put it online
 

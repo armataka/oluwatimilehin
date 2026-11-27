@@ -110,7 +110,7 @@
   .chead h1 { max-width: 640px }
   .prose { margin-top: var(--s6); color: var(--ink-2) }
   .prose > p { margin-bottom: var(--s4) }
-  .prose .lede { font-size: 16px; line-height: 1.55; color: var(--ink); letter-spacing: -.005em }
+  .prose > p:first-child, .prose .lede { font-size: 16px; line-height: 1.55; color: var(--ink); letter-spacing: -.005em }
   .prose h2 { color: var(--ink); font-weight: 500; margin: var(--s7) 0 var(--s3); scroll-margin-top: 40px }
   .prose strong { color: var(--ink); font-weight: 500 }
   .prose ul { margin: 0 0 var(--s4); padding-left: 1.1em }

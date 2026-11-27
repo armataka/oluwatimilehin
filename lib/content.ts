@@ -1,6 +1,6 @@
 import 'server-only';
 import { createReader } from '@keystatic/core/reader';
-import Markdoc from '@markdoc/markdoc';
+import Markdoc, { type RenderableTreeNode } from '@markdoc/markdoc';
 import config from '../keystatic.config';
 
 export const reader = createReader(process.cwd(), config);
@@ -35,5 +35,19 @@ export const markdocConfig = {
     Steps: { render: 'Steps', selfClosing: true, attributes: { items: { type: Array } } },
     Stats: { render: 'Stats', selfClosing: true, attributes: { items: { type: Array } } },
     Modules: { render: 'Modules', selfClosing: true, attributes: { items: { type: Array } } },
+    Locked: { render: 'Locked', selfClosing: true, attributes: {} },
   },
 };
+
+type Node = { name?: string; children?: unknown[] } | string | null;
+const text = (n: unknown): string => (typeof n === 'string' ? n : n && typeof n === 'object' && 'children' in n ? ((n as { children: unknown[] }).children ?? []).map(text).join('') : '');
+
+/** Split a case study at its password line: what's above is public, what's below needs the password. */
+export function splitBody(tree: unknown) {
+  const all = ((tree as { name?: string; children?: Node[] })?.children ?? []) as Node[];
+  const at = all.findIndex((n) => n && typeof n === 'object' && n.name === 'Locked');
+  const pub = at < 0 ? all : all.slice(0, at);
+  const priv = at < 0 ? [] : all.slice(at + 1);
+  const first = all.find((n) => n && typeof n === 'object' && n.name === 'p');
+  return { pub: pub as RenderableTreeNode[], priv: priv as RenderableTreeNode[], hasLine: at >= 0, description: text(first).trim(), sections: priv.filter((n) => n && typeof n === 'object' && n.name === 'h2').length };
+}

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { getProjects, getBody } from '@/lib/content';
+import { getProjects, getBody, splitBody } from '@/lib/content';
 import { COOKIE, token } from '@/lib/nda';
 import { Prose } from '@/components/Prose';
 import { Thumb } from '@/components/Thumb';
@@ -13,7 +13,8 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const p = (await getProjects()).find((x) => x.slug === slug);
-  return p ? { title: `${p.name}: ${p.headline}`, description: p.lede } : {};
+  if (!p) return {};
+  return { title: `${p.name}: ${p.headline}`, description: splitBody(await getBody(slug)).description };
 }
 
 export default async function Project({ params }: Props) {
@@ -27,9 +28,9 @@ export default async function Project({ params }: Props) {
 
   const t = token();
   const open = !p.locked || (!!t && (await cookies()).get(COOKIE)?.value === t);
-  const body = await getBody(slug);
-  // when locked, only the number of sections still to come leaves the server
-  const sections = ((body as { children?: { name?: string }[] } | null)?.children ?? []).filter((c) => c?.name === 'h2').length;
+  // the case study is split at its password line; when locked, only the part above it (and a count of what's below) leaves the server
+  const { pub, priv, sections } = splitBody(await getBody(slug));
+  const gated = p.locked && !open;
 
   return (
     <>
@@ -42,9 +43,8 @@ export default async function Project({ params }: Props) {
           </dl>
         </header>
         <div className="prose" id="prose">
-          <p className="lede">{p.lede}</p>
-          {p.summary.map((s, k) => <p key={k}>{s}</p>)}
-          {open && body ? <Prose content={body} /> : <Gate slug={slug} sections={sections} />}
+          <Prose content={pub} />
+          {gated ? <Gate slug={slug} sections={sections} /> : <Prose content={priv} />}
         </div>
         <nav className="pn" aria-label="More projects" data-r>
           <a className="pv" href={`/work/${prev.slug}`}>

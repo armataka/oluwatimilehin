@@ -70,7 +70,7 @@ export default config({
         order: fields.integer({ label: 'Order on the list', defaultValue: 1 }),
         line: line('One-line description'),
         year: line('Year', 'e.g. 2025–26'),
-        locked: fields.checkbox({ label: 'Locked (NDA)', description: 'Only the summary is public; the rest needs the password', defaultValue: false }),
+        locked: fields.checkbox({ label: 'Locked (NDA)', description: 'Everything below the password line in the case study needs the password', defaultValue: false }),
         thumb: fields.select({
           label: 'Thumbnail colours and mark',
           options: [
@@ -83,8 +83,6 @@ export default config({
         thumbnail: fields.image({ label: 'Thumbnail image (optional)', description: 'Replaces the drawn thumbnail', directory: 'public/images/thumbs', publicPath: '/images/thumbs/' }),
         headline: line('Headline'),
         meta: fields.array(fields.object({ label: line('Label'), value: line('Value') }), { label: 'Details', itemLabel: (p) => p.fields.label.value || 'Detail' }),
-        lede: para('Opening paragraph'),
-        summary: fields.array(para('Paragraph'), { label: 'Summary (always public)', itemLabel: (p) => p.value.slice(0, 48) || 'Paragraph' }),
         body: fields.markdoc({
           label: 'Case study',
           // case-study images go to /private and are served through /media, so locked ones stay behind the password
@@ -107,6 +105,11 @@ export default config({
                   { label: 'Steps', itemLabel: (p) => p.fields.stage.value || 'Step' },
                 ),
               },
+            }),
+            Locked: block({
+              label: 'Password line',
+              description: 'Everything above this is public; everything below it is only shown after the password (when Locked is ticked)',
+              schema: {},
             }),
             Stats: block({
               label: 'Figures',

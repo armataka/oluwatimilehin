@@ -2,7 +2,6 @@ import { getSite, getProjects, reader } from '@/lib/content';
 import { Pronounce } from '@/components/Pronounce';
 import { Icon } from '@/components/Icon';
 import { Thumb } from '@/components/Thumb';
-import { Coin } from '@/components/Coin';
 
 // Line breaks inside a paragraph hold on large screens and fall away on small ones.
 const lines = (s: string) => s.split('\n').flatMap((l, i) => (i ? [' ', <br key={i} className="d" />, l] : [l]));
@@ -17,7 +16,6 @@ export default async function Home() {
         {home.intro.map((p, i) => <p key={i} data-r className="s2">{lines(p)}</p>)}
         <p data-r className="s2">{home.openTo} <br className="d" />
           <a className="ic" href="/me"><span className="u">More about me</span><Icon name="arrow-right" size={14} className="go" /></a></p>
-        <Coin />
       </section>
 
       <section aria-labelledby="w">
