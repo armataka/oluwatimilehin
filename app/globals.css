@@ -486,3 +486,6 @@ a:hover .thumb.art, a:focus-visible .thumb.art { filter: none }
 @keyframes egg-fall { to { transform: translateY(calc(100vh + 120px)) rotate(var(--r)) } }
 .egg-race { position: fixed; z-index: 90; bottom: 12vh; left: -140px; width: 110px; pointer-events: none; animation: egg-race 1.8s cubic-bezier(.5, 0, .2, 1) both }
 @keyframes egg-race { 0% { transform: translateX(0) skewX(-14deg) } 100% { transform: translateX(calc(100vw + 300px)) skewX(-14deg) } }
+.np a.dim { color: #b9b8b2; transition: color .2s } .np a.dim:hover { color: #1ed760 }
+.np:not(.live) .note-ic { animation: none; color: #5a5a55 }
+@media (max-width: 760px) { .np > .dim { display: inline; max-width: 46vw } }

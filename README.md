@@ -42,6 +42,14 @@ Go to `https://<your site>/keystatic` and sign in with Keystatic Cloud (GitHub).
 
 When you run the site on your own computer (`npm run dev`), `/keystatic` edits the files directly instead.
 
+## Spotify in the footer
+
+1. At developer.spotify.com/dashboard, create an app. Add `http://127.0.0.1:3000/callback` as a redirect URI.
+2. Get a refresh token with the scopes `user-read-currently-playing user-read-recently-played` (the standard authorization-code flow; any "Spotify refresh token" guide works).
+3. In Vercel, add `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` and `SPOTIFY_REFRESH_TOKEN`, then redeploy.
+
+Until then the footer says "Nothing playing".
+
 ## Credits
 
 Footer after Emmanuel Hong's Hidden Footer. Name pronunciation after Earvin Fanfair. Section rail after Jesper Vos. Icons: Pixelarticons. Type: Inter, IBM Plex Mono.

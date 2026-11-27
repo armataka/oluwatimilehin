@@ -17,6 +17,11 @@ export function Footer() {
   const [open, setOpenState] = useState(false);
   const [hint, setHint] = useState(false);
   const [peekd, setPeek] = useState(false);
+  const [np, setNp] = useState<{ playing: boolean; title?: string; artist?: string; url?: string | null } | null>(null);
+  useEffect(() => {
+    const load = () => fetch('/api/now-playing').then((r) => r.json()).then(setNp).catch(() => {});
+    load(); const iv = setInterval(load, 60000); return () => clearInterval(iv);
+  }, []);
   const [sound, setSound] = useState(true);
   useEffect(() => setSound(soundOn()), []);
   const toggleSound = () => { const n = !sound; try { localStorage.setItem('sound', n ? 'on' : 'off'); } catch {} setSound(n); if (n) play('press'); };
@@ -153,7 +158,11 @@ export function Footer() {
       <footer className="under" ref={ref} aria-label="Footer">
         {onMe ? <Pile peek={peekd} open={open} /> : null}
         <div className="under-in">
-          <p className="np"><span className="note-ic"><Icon name="music" size={16} /></span><span>Nothing playing</span><span className="dim">Spotify connects at launch</span></p>
+          <p className={`np${np?.playing ? ' live' : ''}`}><span className="note-ic"><Icon name="music" size={16} /></span>
+            {np?.title ? (
+              <><span>{np.playing ? 'Listening to' : 'Last played'}</span>{np.url ? <a href={np.url} className="dim">{np.title} · {np.artist}</a> : <span className="dim">{np.title} · {np.artist}</span>}</>
+            ) : <span>Nothing playing</span>}
+          </p>
           <div className="ctrls">
         <button type="button" className="snd" aria-pressed={sound} aria-label={sound ? 'Sound on. Turn it off' : 'Sound off. Turn it on'} onClick={toggleSound}>
           <Icon name={sound ? 'volume-2' : 'volume-x'} size={16} />
