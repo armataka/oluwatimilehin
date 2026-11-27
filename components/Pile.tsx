@@ -6,7 +6,7 @@ import { stickers, stickerSvg } from '@/lib/stickers';
 
 type Body = { el: HTMLElement; r0: number; r: number; w: number; x: number; y: number; vx: number; vy: number; a: number; held: boolean; tilt: number };
 
-export function Pile({ open }: { open: boolean }) {
+export function Pile({ peek, open }: { peek: boolean; open: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const api = useRef<{ drop: () => void; kick: (p: number) => void } | null>(null);
   const dropped = useRef(false);
@@ -65,7 +65,8 @@ export function Pile({ open }: { open: boolean }) {
     api.current = {
       drop: () => {
         if (still) return;
-        bodies.forEach((b, i) => { b.x = 40 + ((W - 80) * (((i * 5) % bodies.length) + 0.5)) / bodies.length; b.y = -b.r - (i % 4) * 50; b.vx = ((i * 7) % 5) - 2; b.vy = 2; b.a = b.tilt * 3; });
+        // they start just above the edge and are already falling, so they land as the footer finishes opening
+        bodies.forEach((b, i) => { b.x = 40 + ((W - 80) * (((i * 5) % bodies.length) + 0.5)) / bodies.length; b.y = -b.r * 0.6 - (i % 3) * 18; b.vx = ((i * 7) % 5) - 2; b.vy = 5 + (i % 3); b.a = b.tilt * 3; });
         draw(); arena.classList.add('live'); run();
       },
       // every later opening gives them a little hop
@@ -92,10 +93,10 @@ export function Pile({ open }: { open: boolean }) {
     return () => { cancelAnimationFrame(raf); removeEventListener('resize', onResize); };
   }, []);
 
-  useEffect(() => {
-    if (!open) return;
-    if (!dropped.current) { dropped.current = true; api.current?.drop(); } else api.current?.kick(7);
-  }, [open]);
+  // the first sign of the footer coming up starts the drop; later openings make them hop
+  useEffect(() => { if (peek && !dropped.current) { dropped.current = true; api.current?.drop(); } }, [peek]);
+  const opens = useRef(0);
+  useEffect(() => { if (open && ++opens.current > 1) api.current?.kick(5); }, [open]);
 
   return (
     <div className="pile" ref={ref} aria-hidden="true">
