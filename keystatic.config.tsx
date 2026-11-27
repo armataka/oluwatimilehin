@@ -1,10 +1,11 @@
 import { config, fields, collection, singleton } from '@keystatic/core';
 import { block } from '@keystatic/core/content-components';
 
-// Local editing in development. In production, edits are saved to GitHub
-// (set KEYSTATIC_STORAGE=github and the Keystatic GitHub app variables, see README).
+// Local editing in development. On the live site, edits save to GitHub, but only once the GitHub app
+// has been set up (its public slug is the sign): until then the site stays on local mode, so a half-finished
+// setup can't break the build. See README.
 const storage =
-  process.env.NEXT_PUBLIC_KEYSTATIC_STORAGE === 'github'
+  process.env.NEXT_PUBLIC_KEYSTATIC_STORAGE === 'github' && process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG
     ? ({ kind: 'github', repo: 'armataka/oluwatimilehin' } as const)
     : ({ kind: 'local' } as const);
 
