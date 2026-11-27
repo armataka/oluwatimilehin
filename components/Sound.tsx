@@ -39,6 +39,9 @@ function noise(dur: number, vol: number, f0: number, f1: number, q = 0.8) {
   src.buffer = buf; src.connect(bp).connect(g).connect(master); src.start(t);
 }
 
+/** One hummed syllable of the name. */
+export function note(f: number, dur: number) { if (!soundOn()) return; tone(f, dur, 0.09, 'triangle'); tone(f * 2, dur * 0.8, 0.02, 'sine'); }
+
 let lastTick = 0;
 export function play(name: Name) {
   if (!soundOn() || !ctx) return;   // nothing until the first gesture has created the audio context

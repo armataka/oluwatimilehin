@@ -1,0 +1,10 @@
+intro: Screens from the work. The blurred ones are under NDA; the password on my résumé clears them.
+items:
+  - { image: /media/kita/report.webp, title: Ton-km performance report, project: kita, locked: true }
+  - { image: /media/tama/approvals.webp, title: The approval pipeline, project: tama, locked: true }
+  - { image: /media/kita/dashboard.webp, title: The CEO’s dashboard, project: kita, locked: true }
+  - { image: /media/tama/create.webp, title: Creating an audit case, project: tama, locked: true }
+  - { image: /media/kita/trips.webp, title: Trips, project: kita, locked: true }
+  - { image: /media/tama/casetype.webp, title: Documents a case type requires, project: tama, locked: true }
+  - { image: /media/kita/contract.webp, title: A contract, project: kita, locked: true }
+  - { image: /media/kita/products.webp, title: 'Assets: products', project: kita, locked: true }

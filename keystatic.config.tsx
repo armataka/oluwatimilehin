@@ -24,6 +24,7 @@ export default config({
         linkedin: line('LinkedIn URL'),
         resume: line('Résumé URL', 'A link, or /resume.pdf once the file is in /public'),
         updated: line('Last updated', 'Shown in Kit'),
+        audio: fields.file({ label: 'Name recording', description: 'You saying your name (mp3 or m4a). Plays from the pronunciation.', directory: 'public/audio', publicPath: '/audio/' }),
       },
     }),
     home: singleton({
@@ -53,6 +54,22 @@ export default config({
       schema: {
         rows: fields.array(fields.object({ label: line('Label'), value: line('Value') }), { label: 'What the site is made of', itemLabel: (p) => p.fields.label.value || 'Row' }),
         credits: fields.array(fields.object({ label: line('What'), name: line('Who'), url: fields.url({ label: 'Link' }) }), { label: 'After', itemLabel: (p) => p.fields.label.value || 'Credit' }),
+      },
+    }),
+    gallery: singleton({
+      label: 'Gallery',
+      path: 'content/gallery',
+      schema: {
+        intro: line('Introduction'),
+        items: fields.array(
+          fields.object({
+            image: fields.image({ label: 'Image', directory: 'private/projects/gallery', publicPath: '/media/gallery/' }),
+            title: line('Title'),
+            project: line('Project', 'e.g. tama, kita, or leave empty'),
+            locked: fields.checkbox({ label: 'Under NDA', description: 'Shown blurred until the password is entered', defaultValue: false }),
+          }),
+          { label: 'Images', itemLabel: (p) => p.fields.title.value || 'Image' },
+        ),
       },
     }),
   },
@@ -105,8 +122,16 @@ export default config({
                 ),
               },
             }),
+            Loop: block({
+              label: 'Loop of screens',
+              description: 'One frame that cycles through screens; hover holds, click enlarges',
+              schema: { items: fields.array(
+                  fields.object({ src: fields.image({ label: 'Screen', directory: 'private/projects', publicPath: '/media/' }), label: line('Caption') }),
+                  { label: 'Screens', itemLabel: (p) => p.fields.label.value || 'Screen' },
+                ) },
+            }),
             Gallery: block({
-              label: 'Gallery',
+              label: 'Drifting strip',
               description: 'A strip of screens that drifts on a loop; click one to enlarge it',
               schema: {
                 items: fields.array(

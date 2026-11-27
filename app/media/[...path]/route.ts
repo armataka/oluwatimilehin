@@ -3,7 +3,7 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { cookies } from 'next/headers';
-import { getProjects } from '@/lib/content';
+import { getProjects, reader } from '@/lib/content';
 import { COOKIE, token } from '@/lib/nda';
 
 const ROOT = path.join(process.cwd(), 'private', 'projects');
@@ -18,7 +18,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ path: s
 
   // open only if the first folder is a project that isn't locked; everything else needs the password
   const project = (await getProjects()).find((p) => p.slug === parts[0]);
-  const open = project ? !project.locked : false;
+  let open = project ? !project.locked : false;
+  // gallery uploads are open unless they're marked as under NDA
+  if (parts[0] === 'gallery') {
+    const g = await reader.singletons.gallery.read();
+    const it = g?.items.find((i) => String(i.image) === `/media/${parts.join('/')}`);
+    open = !!it && !it.locked;
+  }
   if (!open) {
     const t = token();
     if (!t || (await cookies()).get(COOKIE)?.value !== t) return new Response('Locked', { status: 401 });

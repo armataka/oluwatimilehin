@@ -10,7 +10,7 @@ export default async function Me() {
   return (
     <main className="me">
       <h1 data-r><span className="w5">{site.first}</span> <span className="s3">is Yoruba for “{site.meaning}”.</span></h1>
-      <p data-r className="say-line s3"><Pronounce say={site.say} meaning={site.meaning} /></p>
+      <p data-r className="say-line s3"><Pronounce say={site.say} meaning={site.meaning} audio={site.audio} /></p>
 
       <div className="prose-me">
         {me.bio.map((p, i) => <p key={i} data-r className={i ? 's2' : undefined}>{p}</p>)}

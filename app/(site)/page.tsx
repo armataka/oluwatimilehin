@@ -3,16 +3,17 @@ import { Pronounce } from '@/components/Pronounce';
 import { Icon } from '@/components/Icon';
 import { Thumb } from '@/components/Thumb';
 import { Coin } from '@/components/Coin';
+import { getGallery } from '@/lib/gallery';
 
 // Line breaks inside a paragraph hold on large screens and fall away on small ones.
 const lines = (s: string) => s.split('\n').flatMap((l, i) => (i ? [' ', <br key={i} className="d" />, l] : [l]));
 
 export default async function Home() {
-  const [site, home, projects] = await Promise.all([getSite(), reader.singletons.home.readOrThrow(), getProjects()]);
+  const [site, home, projects, gallery] = await Promise.all([getSite(), reader.singletons.home.readOrThrow(), getProjects(), getGallery({ previewsOnly: true })]);
   return (
     <main className="home">
       <section className="intro">
-        <p data-r>Hi, my name is {site.first} <Pronounce say={site.say} meaning={site.meaning} />, <br className="d" />
+        <p data-r>Hi, my name is {site.first} <Pronounce say={site.say} meaning={site.meaning} audio={site.audio} />, <br className="d" />
           a product designer in Lagos, Nigeria.</p>
         {home.intro.map((p, i) => <p key={i} data-r className="s2">{lines(p)}</p>)}
         <p data-r className="s2">{home.openTo} <br className="d" />
@@ -25,7 +26,7 @@ export default async function Home() {
         <ul className="list">
           {projects.map((w) => (
             <li key={w.slug} data-r>
-              <a className="row" href={`/work/${w.slug}`}>
+              <a className={`row pj-${w.thumb}`} href={`/work/${w.slug}`}>
                 <Thumb kind={w.thumb} src={w.thumbnail} />
                 <span className="txt">
                   <span className="nm"><span className="t">{w.name}</span>{w.locked ? <span className="tag">Locked</span> : null}</span>
@@ -36,6 +37,16 @@ export default async function Home() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section aria-labelledby="g">
+        <h2 id="g" className="label s3" data-r>Gallery</h2>
+        <a className="gal-link" href="/gallery" data-r>
+          <span className="gal-strip" aria-hidden="true">
+            {gallery.items.slice(0, 10).map((it, i) => <i key={i} style={{ backgroundImage: it.preview ? `url(${it.preview})` : undefined }} />)}
+          </span>
+          <span className="gal-meta"><span className="t">All screens</span><span className="s3 num">{String(gallery.items.length).padStart(2, '0')}</span></span>
+        </a>
       </section>
 
       <section aria-labelledby="e">
