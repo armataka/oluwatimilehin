@@ -44,8 +44,10 @@ When you run the site on your own computer (`npm run dev`), `/keystatic` edits t
 
 ## Spotify in the footer
 
-1. At developer.spotify.com/dashboard, create an app. Add `http://127.0.0.1:3000/callback` as a redirect URI.
-2. Get a refresh token with the scopes `user-read-currently-playing user-read-recently-played` (the standard authorization-code flow; any "Spotify refresh token" guide works).
+Spotify only allows this for an app owned by a **Premium** account.
+
+1. At developer.spotify.com/dashboard, create an app (Web API). Under Redirect URIs add exactly `http://127.0.0.1:3000/callback`, and save.
+2. On your computer, run `npm run spotify-token` in this folder (or `node spotify-token.mjs` wherever you saved the file). Paste the Client ID and Client Secret from the app's settings, press Agree in the browser, and the refresh token is printed in the terminal.
 3. In Vercel, add `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` and `SPOTIFY_REFRESH_TOKEN`, then redeploy.
 
 Until then the footer says "Nothing playing".
