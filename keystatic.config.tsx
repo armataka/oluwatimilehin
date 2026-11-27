@@ -105,6 +105,16 @@ export default config({
                 ),
               },
             }),
+            Gallery: block({
+              label: 'Gallery',
+              description: 'A strip of screens that drifts on a loop; click one to enlarge it',
+              schema: {
+                items: fields.array(
+                  fields.object({ src: fields.image({ label: 'Screen', directory: 'private/projects', publicPath: '/media/' }), label: line('Caption') }),
+                  { label: 'Screens', itemLabel: (p) => p.fields.label.value || 'Screen' },
+                ),
+              },
+            }),
             Locked: block({
               label: 'Password line',
               description: 'Everything above this is public; everything below it is only shown after the password (when Locked is ticked)',

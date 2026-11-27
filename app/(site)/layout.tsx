@@ -1,4 +1,3 @@
-import '@fontsource-variable/inter';
 import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/500.css';
 import '../globals.css';
@@ -7,6 +6,7 @@ import { spring } from '@/lib/spring';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Runtime } from '@/components/Runtime';
+import { Sound } from '@/components/Sound';
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const site = await getSite();
@@ -30,6 +30,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <Footer />
       <div className="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged image"><img alt="" id="lb-img" /></div>
       <Runtime />
+      <Sound />
     </>
   );
 }

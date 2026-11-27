@@ -16,5 +16,6 @@ export const icons: Record<string, string> = {
  "mail": "<path d=\"M6 8h2v2H6zm2 2h2v2H8zm10-2h-2v2h2zm-2 2h-2v2h2zm-6 2h4v2h-4zM2 6h2v12H2zm18 0h2v12h-2zM4 4h16v2H4zm0 14h16v2H4z\"/>",
  "linkedin": "<path d=\"M7 22H1V8h6v14Zm12-12h-8v10h2v-8h4v2h-2v8H9V8h10v2Zm4 12h-6v-8h2v6h2v-8h2v10ZM3 20h2V10H3v10Zm18-8h-2v-2h2v2ZM5 7H3V5h2v2ZM3 5H1V3h2v2Zm4 0H5V3h2v2ZM5 3H3V1h2v2Z\"/>",
  "file-text": "<path d=\"M6 4H4v16h2zm10-2H6v2h10zm4 4h-2v14h2zm-2 14H6v2h12zM16 4h2v2h-2zm-4 0h2v6h-2z\"/>\n  <path d=\"M12 8h6v2h-6zm-4 8h8v2H8zm0-4h8v2H8zm0-4h2v2H8z\"/>",
- "corner-down-left": "<path d=\"M18 16H4v-2h14zm2-2h-2V4h2z\"/>\n  <path d=\"M8 10h2v8H8zm-2 2h2v2H6zm0 4h2v2H6zm2 2h2v2H8z\"/>"
+ "corner-down-left": "<path d=\"M18 16H4v-2h14zm2-2h-2V4h2z\"/>\n  <path d=\"M8 10h2v8H8zm-2 2h2v2H6zm0 4h2v2H6zm2 2h2v2H8z\"/>",
+ "volume-x": "<path d=\"M13 22h-2v-2H9v-2h2V6H9V4h2V2h2v20Zm-4-4H7v-2h2v2Zm-2-8H5v4h2v2H3V8h4v2Zm10.001 5.224h-2v-2H17v-2h-1.999v-2h2v2H19v2h-1.999v2Zm3.999 0h-2v-2h2v2Zm0-4h-2v-2h2v2ZM9 8H7V6h2v2Z\"/>"
 };

@@ -15,7 +15,7 @@
       --ink-3: light-dark(#a1a19b, #6a6964);
       --line: light-dark(#e6e6e2, #2a2a28);
       --accent: light-dark(#2142c5, #93b0ff);
-      --sans: 'Inter Variable', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
       --out: cubic-bezier(.16, 1, .3, 1);
       --inout: cubic-bezier(.65, 0, .35, 1);
@@ -30,7 +30,7 @@
     html { -webkit-text-size-adjust: 100%; background: #0c0c0b; overscroll-behavior-y: none }
     html.lenis, html.lenis body { height: auto }
     .lenis.lenis-stopped { overflow: clip }
-    body { margin: 0; color: var(--ink); font: 400 14px/1.62 var(--sans); font-feature-settings: 'cv11', 'ss01'; letter-spacing: -.006em; -webkit-font-smoothing: antialiased; overflow-x: clip }
+    body { margin: 0; color: var(--ink); font: 400 14px/1.62 var(--sans); letter-spacing: -.006em; -webkit-font-smoothing: antialiased; overflow-x: clip }
     p { margin: 0 0 var(--s4); text-wrap: pretty }
     h1, h2, h3 { font: inherit; margin: 0; text-wrap: balance }
     ::selection { background: var(--ink); color: var(--bg) }
@@ -102,12 +102,7 @@
   #rail a span { position: absolute; left: 36px; white-space: nowrap; font-size: 12px; line-height: 1; padding: 5px 8px; border-radius: 4px; background: var(--ink); color: var(--bg); opacity: 0; transform: translateX(-6px); filter: blur(3px); transition: opacity .3s var(--out), transform .45s var(--out), filter .3s var(--out); pointer-events: none }
   #rail a:hover span, #rail a:focus-visible span { opacity: 1; transform: none; filter: none }
   @media (max-width: 1100px) { .rail { display: none } }
-  .chead h1 { font-size: 22px; line-height: 1.3; letter-spacing: -.012em }
-  .meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4) var(--s5); margin: var(--s5) 0 0 }
-  .meta div { display: grid; gap: 2px }
-  .meta dd { margin: 0; color: var(--ink) }
 
-  .chead h1 { max-width: 640px }
   .prose { margin-top: var(--s6); color: var(--ink-2) }
   .prose > p { margin-bottom: var(--s4) }
   .prose > p:first-child, .prose .lede { font-size: 16px; line-height: 1.55; color: var(--ink); letter-spacing: -.005em }
@@ -179,8 +174,8 @@
 
   /* the audit path: a stepper whose line fills as you read down it */
   .steps { position: relative; list-style: none; margin: var(--s5) 0; padding: 0; --p: 0 }
-  .steps::before, .steps::after { content: ''; position: absolute; left: 13px; top: 14px; bottom: 14px; width: 2px; border-radius: 1px; background: var(--line) }
-  .steps::after { background: var(--ink); transform-origin: top; transform: scaleY(var(--p)) }
+  .steps::before, .steps::after { content: ''; position: absolute; left: 13px; top: var(--l0, 14px); bottom: var(--l1, 14px); width: 2px; border-radius: 1px; background: var(--line) }
+  .steps::after { background: var(--accent-step, var(--ink)); transform-origin: top; transform: scaleY(var(--p)) }
   .steps .phase { position: relative; margin: var(--s4) 0 var(--s2) 44px; font: 500 10.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3) }
   .steps .phase:first-child { margin-top: 0 }
   .steps .st { position: relative; display: grid; grid-template-columns: 28px 1fr; gap: 16px; padding: 6px 0 14px }
@@ -309,43 +304,101 @@
 @keyframes nudge { 50% { transform: translateY(3px) } }
 @media (prefers-reduced-motion: reduce) { .more .px { animation: none } }
 
-/* ---- One Timi: the coin on the home page ---- */
+/* ---- One Timi: a coin half-buried in sand on the home page ---- */
 .home .intro { position: relative }
-.coin-wrap { position: absolute; right: -8px; top: 64px; width: 156px; display: grid; justify-items: center; gap: 14px; perspective: 720px; z-index: 1 }
-.coin-float { position: relative; animation: coin-float 6s var(--inout) infinite }
-@keyframes coin-float { 50% { transform: translateY(-6px) } }
-.coin { all: unset; display: block; width: 156px; height: 156px; border-radius: 50%; cursor: grab; touch-action: pan-y; -webkit-tap-highlight-color: transparent; --rx: 0deg; --ry: 0deg; --hx: 50%; --gx: 50%; --gy: 30%; --latent: 0 }
-.held .coin { cursor: grabbing }
+.coin-scene { position: absolute; right: -36px; top: 40px; width: 230px; height: 220px; perspective: 700px; z-index: 1 }
+.coin-tone { position: absolute; inset: 0; perspective: 700px; filter: grayscale(1) contrast(1.04); transition: filter .9s var(--out) }
+.coin-scene.up .coin-tone { filter: none }
+.sand { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none }
+.sand.bed { z-index: 0 } .sand.lip { z-index: 3 } .sand.dust { z-index: 4 }
+.coin { all: unset; position: absolute; left: calc(50% - 75px); width: 150px; height: 150px; border-radius: 50%; z-index: 2; cursor: pointer; -webkit-tap-highlight-color: transparent; --lift: 0px; --rx: 0deg; --ry: 0deg; --hx: 50%; transform: translateY(var(--lift)) }
 .coin:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px }
 .coin-body { position: relative; display: block; width: 100%; height: 100%; transform-style: preserve-3d; transform: rotateX(var(--rx)) rotateY(var(--ry)) }
-/* the edge: thin discs stacked through the coin's thickness, striped like reeding */
-.coin-edge { position: absolute; inset: 0; border-radius: 50%; transform: translateZ(var(--z)); background: repeating-conic-gradient(#c8961e 0 1.5deg, #8a5d08 1.5deg 3deg) }
-.coin-face { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; backface-visibility: hidden; transform: translateZ(3.4px); isolation: isolate }
-.coin-face.back { transform: rotateY(180deg) translateZ(3.4px) }
-/* the enamel ring: every colour the site has been missing */
-.coin-ring { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 210deg, #ff3d81, #c026d3, #7c3aed, #4f46e5, #0ea5e9, #22d3ee, #10b981, #84cc16, #facc15, #fb923c, #ff3d81); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / .45), inset 0 3px 6px rgb(255 255 255 / .35), inset 0 -4px 8px rgb(0 0 0 / .25) }
-.coin-face.back .coin-ring { background: conic-gradient(from 30deg, #22d3ee, #10b981, #84cc16, #facc15, #fb923c, #ff3d81, #c026d3, #7c3aed, #4f46e5, #0ea5e9, #22d3ee) }
-/* the gold core, struck slightly proud of the ring */
-.coin-core { position: absolute; inset: 14.5%; border-radius: 50%; background: radial-gradient(circle at 36% 30%, #fff7cf 0%, #f6d36b 28%, #e0a92a 55%, #a8740c 82%, #7a5106 100%); box-shadow: 0 0 0 1px rgb(90 55 0 / .5), 0 2px 5px rgb(0 0 0 / .35), inset 0 2px 3px rgb(255 255 255 / .6), inset 0 -3px 6px rgb(90 55 0 / .45) }
+.coin-edge { position: absolute; inset: 0; border-radius: 50%; transform: translateZ(var(--z)); background: repeating-conic-gradient(#b48a35 0 1.2deg, #6e4c12 1.2deg 2.4deg) }
+.coin-face { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; backface-visibility: hidden; transform: translateZ(2.8px) }
+.coin-face.back { transform: rotateY(180deg) translateZ(2.8px) }
 .coin-svg { position: absolute; inset: 0; width: 100%; height: 100% }
-.coin-legend { font: 700 9.2px/1 var(--mono); letter-spacing: .14em; fill: #fff; paint-order: stroke; stroke: rgb(0 0 0 / .25); stroke-width: .6px }
-.coin-micro { font: 500 2.6px/1 var(--mono); letter-spacing: .06em; fill: #6b4300; opacity: .8 }
-.coin-mark { font: 600 34px/1 Georgia, 'Times New Roman', serif; text-anchor: middle }
-.coin-denom { font: 700 54px/1 Georgia, 'Times New Roman', serif; text-anchor: middle; paint-order: stroke }
-.coin-small { font: 700 7px/1 var(--mono); letter-spacing: .22em; text-anchor: middle }
-.coin-tiny { font: 600 4.4px/1 var(--mono); letter-spacing: .16em; text-anchor: middle }
-/* the latent image: only appears when you tilt it */
-.coin-latent { position: absolute; inset: 0; display: grid; place-items: center; padding-top: 2%; font: 700 11px/1 var(--mono); letter-spacing: .12em; color: #5a3700; opacity: calc(var(--latent) * .75); transform: translateY(-27%); mix-blend-mode: multiply; pointer-events: none }
-/* holographic sheen and glare */
-.coin-holo { position: absolute; inset: 0; border-radius: 50%; background: linear-gradient(115deg, transparent 18%, rgb(255 0 170 / .35) 32%, rgb(0 230 255 / .35) 44%, rgb(180 255 0 / .3) 56%, rgb(255 200 0 / .3) 66%, transparent 80%) var(--hx) 50% / 300% 100% no-repeat; mix-blend-mode: color-dodge; opacity: .75; pointer-events: none }
-.coin-glare { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at var(--gx) var(--gy), rgb(255 255 255 / .55), rgb(255 255 255 / 0) 42%); mix-blend-mode: overlay; pointer-events: none }
-.coin-shadow { position: absolute; left: 14%; right: 14%; bottom: -18px; height: 14px; border-radius: 50%; background: radial-gradient(closest-side, rgb(0 0 0 / .22), transparent); animation: coin-shadow 6s var(--inout) infinite; pointer-events: none }
-@keyframes coin-shadow { 50% { transform: scale(.88); opacity: .7 } }
-.coin-hint { white-space: nowrap; font: 500 10px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); opacity: 0; transform: translateY(-4px); transition: opacity .4s var(--out), transform .5s var(--out) }
-.coin-wrap:hover .coin-hint { opacity: 1; transform: none }
+.coin-legend { font: 600 8.6px/1 var(--mono); letter-spacing: .16em }
+.coin-denom { font: 700 58px/1 Georgia, 'Times New Roman', serif; text-anchor: middle }
+.coin-small { font: 700 7.4px/1 var(--mono); letter-spacing: .24em; text-anchor: middle }
+.coin-tiny { font: 600 4.6px/1 var(--mono); letter-spacing: .16em; text-anchor: middle }
+/* colour on hover: a rainbow sheen sweeps across as it turns */
+.coin-holo { position: absolute; inset: 0; border-radius: 50%; background: linear-gradient(115deg, transparent 25%, rgb(255 120 200 / .35) 38%, rgb(120 230 255 / .35) 47%, rgb(200 255 140 / .3) 56%, rgb(255 220 120 / .3) 64%, transparent 76%) var(--hx) 50% / 300% 100% no-repeat; mix-blend-mode: screen; opacity: 0; transition: opacity .6s var(--out); pointer-events: none }
+.coin-scene.up .coin-holo { opacity: .45 }
+/* the dent its weight leaves in the sand, and its shadow once it's up */
+.coin-shade { position: absolute; z-index: 1; left: calc(50% - 64px); width: 128px; bottom: 26px; height: 18px; border-radius: 50%; background: radial-gradient(closest-side, rgb(60 40 10 / calc(.18 + var(--up, 0) * .12)), transparent); transform: scale(calc(1 - var(--up, 0) * .15)); filter: blur(calc(1px + var(--up, 0) * 3px)) }
+.coin-hint { position: absolute; left: 0; right: 0; bottom: -2px; text-align: center; white-space: nowrap; font: 500 10px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); opacity: 0; transition: opacity .4s var(--out) }
+.coin-scene.up .coin-hint { opacity: 1 }
 @media (max-width: 900px) {
-  .coin-wrap { position: relative; right: auto; top: auto; margin: var(--s5) auto 0; width: 132px }
-  .coin { width: 132px; height: 132px }
-  .coin-hint { opacity: 1; transform: none }
+  .coin-scene { position: relative; right: auto; top: auto; margin: var(--s5) auto 0 }
+  .coin-hint { opacity: 1 }
 }
-@media (prefers-reduced-motion: reduce) { .coin-float, .coin-shadow { animation: none } }
+
+/* ---- case study head and details ---- */
+.cbody { position: relative }
+.eyebrow { display: flex; align-items: center; gap: 8px; margin: 0 0 var(--s3); font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3) }
+.eyebrow span:first-child { color: var(--ink) }
+.eyebrow .tag { margin-left: 4px }
+.chead h1 { font-size: clamp(24px, 3vw, 30px); line-height: 1.18; letter-spacing: -.02em; font-weight: 600; max-width: 22ch; text-wrap: balance }
+.meta-wrap { margin-top: var(--s5) }
+.meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s4) var(--s5); margin: 0 }
+.meta div { display: grid; gap: 4px; align-content: start }
+.meta dt { font: 500 10.5px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3) }
+.meta dd { margin: 0; color: var(--ink); font-size: 13.5px; line-height: 1.45 }
+@media (max-width: 600px) { .meta { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+/* wide screens: the details sit in a column to the right and stay in view */
+@media (min-width: 1240px) {
+  .meta-wrap { position: absolute; top: 0; bottom: 0; left: calc(100% + 56px); width: 190px; margin: 0 }
+  .meta { position: sticky; top: 96px; grid-template-columns: 1fr; gap: 18px; padding-left: 16px; border-left: 1px solid var(--line) }
+}
+/* status chips */
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px 3px 7px; border-radius: 999px; font: 500 11px/1.3 var(--mono); letter-spacing: .03em; text-transform: uppercase; background: var(--c-bg); color: var(--c-fg); box-shadow: inset 0 0 0 1px var(--c-line) }
+.chip i { width: 6px; height: 6px; border-radius: 50%; background: var(--c-dot); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-dot) 22%, transparent) }
+.chip.live { --c-bg: light-dark(#ecfdf3, #0d2a1c); --c-fg: light-dark(#067647, #75e0a7); --c-line: light-dark(#abefc6, #155e3b); --c-dot: #17b26a }
+.chip.live i { animation: chip-pulse 2.4s var(--inout) infinite }
+.chip.built { --c-bg: light-dark(#eff4ff, #101a33); --c-fg: light-dark(#1849a9, #9db6f5); --c-line: light-dark(#c7d7fe, #253a7a); --c-dot: #2e6ae6 }
+.chip.wip { --c-bg: light-dark(#fffaeb, #2b1e05); --c-fg: light-dark(#b54708, #fdb022); --c-line: light-dark(#fedf89, #6a4508); --c-dot: #f79009 }
+.chip.past { --c-bg: var(--wash); --c-fg: var(--ink-2); --c-line: var(--line); --c-dot: var(--ink-3) }
+.chip-note { display: block; margin-top: 6px; color: var(--ink-2); font-size: 12.5px }
+@keyframes chip-pulse { 50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--c-dot) 0%, transparent) } }
+@media (prefers-reduced-motion: reduce) { .chip.live i { animation: none } }
+
+/* ---- section rail: heavier ticks; the section you're in is named ---- */
+.rail { left: auto; right: calc(50% + var(--col) / 2 + 40px) }
+#rail { justify-items: end; gap: 2px }
+#rail a { height: 14px; width: auto; justify-content: flex-end; gap: 10px }
+#rail a i { order: 2; height: 2.5px; width: 12px; border-radius: 2px; background: var(--line) ; flex: none }
+#rail a.on i { width: 22px; background: var(--ink) }
+#rail a:hover i { width: 22px; background: var(--ink-2) }
+#rail a span { position: static; order: 1; padding: 0; background: none; color: var(--ink-3); font: 500 10.5px/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; max-width: 180px; overflow: hidden; text-overflow: ellipsis; opacity: 0; transform: translateX(6px); filter: blur(2px) }
+#rail a.on span { opacity: 1; transform: none; filter: none; color: var(--ink) }
+#rail a:hover span { opacity: 1; transform: none; filter: none }
+@media (max-width: 1240px) { .rail { display: none } }
+
+/* ---- the audit stepper: in TAMA's green, and the line runs only between the first and last step ---- */
+.steps { --accent-step: light-dark(#12804a, #3ccb7f) }
+.steps .st.on .dot { background: var(--accent-step) !important; color: #fff !important; box-shadow: inset 0 0 0 1.5px var(--accent-step), 0 0 0 4px color-mix(in srgb, var(--accent-step) 16%, transparent) !important }
+.steps .phase { color: var(--accent-step) }
+
+/* ---- colour arrives on hover ---- */
+.thumb.art { filter: grayscale(1) contrast(1.05) brightness(1.04); transition: transform .5s var(--out), background-position 1.6s var(--out), filter .6s var(--out) }
+a:hover .thumb.art, a:focus-visible .thumb.art { filter: none }
+
+/* ---- gallery: a full-width strip of screens that drifts on a loop ---- */
+.prose > .gallery { margin: var(--s6) calc(50% - 50vw) var(--s6); width: 100vw; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent) }
+.gallery-track { display: flex; gap: 20px; width: max-content; padding: 4px 0 8px; cursor: grab; touch-action: pan-y; will-change: transform; user-select: none }
+.gallery-track.dragging { cursor: grabbing }
+.gallery-item { margin: 0; flex: none }
+.gallery-item img { display: block; height: clamp(220px, 30vw, 380px); width: auto; border-radius: 10px; box-shadow: 0 0 0 1px light-dark(rgb(0 0 0 / .06), rgb(255 255 255 / .08)), 0 2px 4px -1px rgb(0 0 0 / .06), 0 12px 24px -8px rgb(0 0 0 / .14); transition: transform .6s var(--out), box-shadow .6s var(--out) }
+.gallery-item:hover img { transform: translateY(-3px) }
+.gallery-item figcaption { margin-top: 10px; font: 500 10.5px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3) }
+@media (prefers-reduced-motion: reduce) { .prose > .gallery { overflow-x: auto } }
+/* body screens: no backgrounds now, just the window */
+.fig img { background: none !important; border-radius: 10px; box-shadow: 0 0 0 1px light-dark(rgb(0 0 0 / .06), rgb(255 255 255 / .08)), 0 2px 4px -1px rgb(0 0 0 / .05), 0 12px 24px -10px rgb(0 0 0 / .12) }
+.rail { transition: opacity .4s var(--out) }
+.rail.dim { opacity: 0; pointer-events: none }
+.ctrls { display: flex; align-items: center; gap: 6px }
+.snd { all: unset; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 6px; background: #181817; color: #6f6e69; cursor: pointer; transition: color .2s }
+.snd:hover, .snd[aria-pressed=true] { color: #e9e8e3 }
+.snd[aria-pressed=false] { color: #5a5a55 }
+.snd:focus-visible { outline: 2px solid #93b0ff }

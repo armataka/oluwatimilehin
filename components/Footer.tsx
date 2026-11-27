@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Icon } from './Icon';
 import { Pile } from './Pile';
+import { play, soundOn } from './Sound';
 
 type Theme = 'auto' | 'light' | 'dark';
 
@@ -16,6 +17,9 @@ export function Footer() {
   const [open, setOpenState] = useState(false);
   const [hint, setHint] = useState(false);
   const [peekd, setPeek] = useState(false);
+  const [sound, setSound] = useState(true);
+  useEffect(() => setSound(soundOn()), []);
+  const toggleSound = () => { const n = !sound; try { localStorage.setItem('sound', n ? 'on' : 'off'); } catch {} setSound(n); if (n) play('press'); };
   const ctl = useRef<{ setOpen: (o: boolean) => void } | null>(null);
   const onMe = (usePathname() ?? '').startsWith('/me');
 
@@ -69,7 +73,7 @@ export function Footer() {
       dragging = false; acc = 0; clearTimeout(idle);
       target = o ? H() : 0; go();
       if (o === isOpen) return;
-      isOpen = o; setOpenState(o);
+      isOpen = o; setOpenState(o); play(o ? 'open' : 'close');
       root.classList.toggle('under-open', o);
       ignoreUntil = performance.now() + 450; // swallow the rest of the push that opened or closed it
       setHint(!o && atBottom());
@@ -150,13 +154,18 @@ export function Footer() {
         {onMe ? <Pile peek={peekd} open={open} /> : null}
         <div className="under-in">
           <p className="np"><span className="note-ic"><Icon name="music" size={16} /></span><span>Nothing playing</span><span className="dim">Spotify connects at launch</span></p>
-          <div className="theme" role="radiogroup" aria-label="Theme">
+          <div className="ctrls">
+        <button type="button" className="snd" aria-pressed={sound} aria-label={sound ? 'Sound on. Turn it off' : 'Sound off. Turn it on'} onClick={toggleSound}>
+          <Icon name={sound ? 'volume-2' : 'volume-x'} size={16} />
+        </button>
+        <div className="theme" role="radiogroup" aria-label="Theme">
             {opts.map((o) => (
               <button key={o.t} type="button" role="radio" aria-checked={theme === o.t} aria-label={o.label} onClick={() => choose(o.t)}>
                 <Icon name={o.icon} size={16} />
               </button>
             ))}
           </div>
+        </div>
           <p className="bar-meta">
             <span className="fi"><Icon name="clock" size={14} />Lagos <time data-clock suppressHydrationWarning /></span>
             <a className="fi" href="https://www.emmanuelhong.com/explorations/hidden-footer">Footer after Emmanuel Hong<Icon name="external-link" size={13} /></a>

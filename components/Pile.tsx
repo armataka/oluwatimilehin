@@ -28,34 +28,61 @@ export function Pile({ peek, open }: { peek: boolean; open: boolean }) {
       const n = bodies.length, pad = 40;
       bodies.forEach((b, i) => { b.x = pad + ((W - pad * 2) * (((i * 5) % n) + 0.5)) / n; b.y = H - b.r; b.vx = b.vy = 0; b.a = b.w >= 1.3 ? b.tilt * 0.4 : b.tilt * 3; });
     };
+    // Small substeps, several passes of contact resolution, inelastic resting contacts and a sleep threshold:
+    // stacked stickers settle and stay still instead of buzzing against each other.
+    const floorY = (b: Body) => H - b.r;
     const step = () => {
-      raf = 0; let e = 0, held = false;
+      raf = 0; let held = false;
+      for (let sub = 0; sub < 2; sub++) {
+        for (const b of bodies) {
+          if (b.held) { held = true; continue; }
+          b.vy += 0.3; b.vx *= 0.995; b.x += b.vx * 0.5; b.y += b.vy * 0.5;
+          if (b.y > floorY(b)) { b.y = floorY(b); if (b.vy > 1.2) b.vy *= -0.3; else b.vy = 0; b.vx *= 0.9; }
+          const hw = b.r * Math.max(1, b.w);
+          if (b.x < hw) { b.x = hw; b.vx = Math.abs(b.vx) * 0.4; }
+          if (b.x > W - hw) { b.x = W - hw; b.vx = -Math.abs(b.vx) * 0.4; }
+        }
+        for (let pass = 0; pass < 4; pass++) {
+          for (let i = 0; i < bodies.length; i++) for (let j = i + 1; j < bodies.length; j++) {
+            const p = bodies[i], q = bodies[j];
+            let dx = q.x - p.x, dy = q.y - p.y;
+            const d = Math.hypot(dx, dy), min = p.r + q.r;
+            if (d >= min || d < 1e-6) continue;
+            dx /= d; dy /= d;
+            // the one lying on the floor (or held) gives way less
+            const pf = p.held ? 0 : p.y >= floorY(p) - 0.5 ? 0.2 : 1, qf = q.held ? 0 : q.y >= floorY(q) - 0.5 ? 0.2 : 1;
+            const tot = pf + qf || 1, o = min - d;
+            p.x -= dx * o * (pf / tot); p.y -= dy * o * (pf / tot); q.x += dx * o * (qf / tot); q.y += dy * o * (qf / tot);
+            if (pass === 0) {
+              const vn = (q.vx - p.vx) * dx + (q.vy - p.vy) * dy;
+              if (vn < 0) {
+                const e = vn < -2 ? 0.3 : 0;            // fast hits bounce a little; resting contact doesn't
+                const jn = (-(1 + e) * vn) / tot;
+                p.vx -= jn * dx * pf; p.vy -= jn * dy * pf; q.vx += jn * dx * qf; q.vy += jn * dy * qf;
+                // contact friction
+                const tx = -dy, ty = dx, vt = (q.vx - p.vx) * tx + (q.vy - p.vy) * ty;
+                p.vx += vt * tx * 0.08 * pf; p.vy += vt * ty * 0.08 * pf; q.vx -= vt * tx * 0.08 * qf; q.vy -= vt * ty * 0.08 * qf;
+              }
+            }
+          }
+          for (const b of bodies) if (!b.held && b.y > floorY(b)) { b.y = floorY(b); if (b.vy > 0) b.vy = 0; }
+        }
+      }
+      let e = 0;
       for (const b of bodies) {
-        if (b.held) { held = true; continue; }
-        b.vy += 0.55; b.vx *= 0.992; b.x += b.vx; b.y += b.vy;
-        const floor = b.y >= H - b.r - 1;
-        if (b.w >= 1.3 && floor && Math.abs(b.vx) < 2.5) { const t = Math.round(b.a / 360) * 360 + b.tilt * 0.4; b.a += (t - b.a) * 0.14; b.vx *= 0.9; e += Math.abs(t - b.a) * 0.1; }
-        else b.a += (b.vx / b.r) * 40;
-        if (b.y > H - b.r) { b.y = H - b.r; if (b.vy > 0) b.vy *= -0.36; if (Math.abs(b.vy) < 1) b.vy = 0; b.vx *= 0.93; }
-        const hw = b.r * Math.max(1, b.w);
-        if (b.x < hw) { b.x = hw; b.vx = Math.abs(b.vx) * 0.5; }
-        if (b.x > W - hw) { b.x = W - hw; b.vx = -Math.abs(b.vx) * 0.5; }
+        if (b.held) continue;
+        // wide ones settle flat; round ones roll, but only when they're really moving
+        const onFloor = b.y >= floorY(b) - 0.5;
+        if (b.w >= 1.3 && onFloor && Math.abs(b.vx) < 2.5) { const t = Math.round(b.a / 360) * 360 + b.tilt * 0.4; b.a += (t - b.a) * 0.12; b.vx *= 0.9; e += Math.abs(t - b.a) * 0.05; }
+        else if (Math.abs(b.vx) > 0.3) b.a += (b.vx / b.r) * 40;
+        if (Math.abs(b.vx) < 0.06) b.vx = 0;
+        if (onFloor && Math.abs(b.vy) < 0.5) b.vy = 0;
+        e += Math.abs(b.vx) + Math.abs(b.vy);
       }
-      for (let i = 0; i < bodies.length; i++) for (let j = i + 1; j < bodies.length; j++) {
-        const p = bodies[i], q = bodies[j];
-        let dx = q.x - p.x, dy = q.y - p.y;
-        const d = Math.hypot(dx, dy), min = p.r + q.r;
-        if (d >= min || d === 0) continue;
-        dx /= d; dy /= d;
-        const o = min - d, pm = p.held ? 0 : q.held ? 1 : 0.5, qm = q.held ? 0 : p.held ? 1 : 0.5;
-        p.x -= dx * o * pm; p.y -= dy * o * pm; q.x += dx * o * qm; q.y += dy * o * qm;
-        const vn = (q.vx - p.vx) * dx + (q.vy - p.vy) * dy;
-        if (vn < 0) { const jn = (-1.3 * vn) / 2; if (!p.held) { p.vx -= jn * dx; p.vy -= jn * dy; } if (!q.held) { q.vx += jn * dx; q.vy += jn * dy; } }
-      }
-      bodies.forEach((b) => { e += Math.abs(b.vx) + Math.abs(b.vy); });
       draw();
-      quiet = e < bodies.length * 0.6 && !held ? quiet + 1 : 0;
-      if (quiet < 60) raf = requestAnimationFrame(step);
+      quiet = e < bodies.length * 0.25 && !held ? quiet + 1 : 0;
+      if (quiet < 40) raf = requestAnimationFrame(step);
+      else bodies.forEach((b) => { b.vx = 0; b.vy = 0; });
     };
     const run = () => { quiet = 0; if (!raf && !still) raf = requestAnimationFrame(step); };
 

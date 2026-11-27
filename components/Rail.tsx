@@ -30,10 +30,21 @@ export function Rail() {
     const mark = () => {
       let k = -1; secs().forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight * 0.35) k = i; });
       [...rail.children].forEach((a, i) => a.classList.toggle('on', i === k));
+      // step out of the way while a full-width gallery passes behind it
+      const rr = rail.getBoundingClientRect();
+      const under = [...document.querySelectorAll('.gallery')].some((g) => { const b = g.getBoundingClientRect(); return b.bottom > rr.top - 20 && b.top < rr.bottom + 20; });
+      rail.parentElement?.classList.toggle('dim', under);
     };
     const fill = () => document.querySelectorAll<HTMLElement>('.steps').forEach((ol) => {
       const r = ol.getBoundingClientRect(), y = innerHeight * 0.55;
-      ol.style.setProperty('--p', Math.max(0, Math.min(1, (y - r.top) / r.height)).toFixed(3));
+      // the line runs from the first step's circle to the last one's, not past them
+      const dots = ol.querySelectorAll<HTMLElement>('.dot');
+      if (!dots.length) return;
+      const a = dots[0].getBoundingClientRect(), b = dots[dots.length - 1].getBoundingClientRect();
+      const l0 = a.top + a.height / 2 - r.top, l1 = r.bottom - (b.top + b.height / 2);
+      ol.style.setProperty('--l0', `${l0.toFixed(1)}px`); ol.style.setProperty('--l1', `${l1.toFixed(1)}px`);
+      const span = r.height - l0 - l1;
+      ol.style.setProperty('--p', Math.max(0, Math.min(1, (y - r.top - l0) / span)).toFixed(3));
       ol.querySelectorAll('.st').forEach((st) => st.classList.toggle('on', st.getBoundingClientRect().top + 14 < y));
     });
     let raf = 0;

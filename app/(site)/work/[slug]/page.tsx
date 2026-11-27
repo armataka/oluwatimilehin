@@ -10,6 +10,18 @@ import { Gate } from '@/components/Gate';
 
 type Props = { params: Promise<{ slug: string }> };
 
+// "Built; rolls out next audit cycle" -> a chip for the state, then the detail
+function Status({ value }: { value: string }) {
+  const [state, ...rest] = value.split(/;\s*/);
+  const kind = /live|shipped|launched/i.test(state) ? 'live' : /built|ready|done/i.test(state) ? 'built' : /progress|build|design/i.test(state) ? 'wip' : 'past';
+  return (
+    <>
+      <span className={`chip ${kind}`}><i aria-hidden="true" />{state}</span>
+      {rest.length ? <span className="chip-note">{rest.join('; ')}</span> : null}
+    </>
+  );
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const p = (await getProjects()).find((x) => x.slug === slug);
@@ -37,11 +49,20 @@ export default async function Project({ params }: Props) {
       <Rail />
       <article className="cbody">
         <header className="chead">
-          <h1 data-r><span className="w5">{p.name}</span> <span className="s3">{p.headline}</span></h1>
-          <dl className="meta" data-r>
-            {p.meta.map((m, k) => (<div key={k}><dt className="s3">{m.label}</dt><dd>{m.value}</dd></div>))}
-          </dl>
+          <p className="eyebrow" data-r><span>{p.name}</span><span aria-hidden="true">·</span><span>{p.year}</span>{p.locked ? <span className="tag">Locked</span> : null}</p>
+          <h1 data-r>{p.headline}</h1>
         </header>
+        {/* the details: inline under the title on smaller screens, a sticky column to the right on wide ones */}
+        <aside className="meta-wrap" aria-label="Project details">
+          <dl className="meta" data-r>
+            {p.meta.map((m, k) => (
+              <div key={k}>
+                <dt>{m.label}</dt>
+                <dd>{m.label.toLowerCase() === 'status' ? <Status value={m.value} /> : m.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </aside>
         <div className="prose" id="prose">
           <Prose content={pub} />
           {gated ? <Gate slug={slug} sections={sections} /> : <Prose content={priv} />}

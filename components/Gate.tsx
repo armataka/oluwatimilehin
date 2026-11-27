@@ -18,7 +18,7 @@ export function Gate({ slug, sections }: { slug: string; sections: number }) {
     try {
       const r = await fetch('/api/unlock', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ password: pw, slug }) });
       if (r.ok) {
-        setState('done');
+        setState('done'); window.dispatchEvent(new CustomEvent('sfx', { detail: 'unlock' }));
         setTimeout(() => setState('leaving'), 650);
         setTimeout(() => router.refresh(), 1100);
         return;
