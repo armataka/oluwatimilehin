@@ -177,7 +177,6 @@ export function Footer() {
         </div>
           <p className="bar-meta">
             <span className="fi"><Icon name="clock" size={14} />Lagos <time data-clock suppressHydrationWarning /></span>
-            <a className="fi" href="https://www.emmanuelhong.com/explorations/hidden-footer">Footer after Emmanuel Hong<Icon name="external-link" size={13} /></a>
           </p>
         </div>
       </footer>
