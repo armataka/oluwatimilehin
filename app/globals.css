@@ -50,7 +50,7 @@
     :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px }
 
     /* the sheet sits over the footer */
-    .sheet { position: relative; z-index: 2; background: var(--bg); min-height: 100vh; min-height: 100svh; margin-bottom: var(--under-h); border-radius: 0 0 calc(var(--r) * 2) calc(var(--r) * 2); box-shadow: 0 1px 0 light-dark(rgb(0 0 0 / .04), #2a2a28) }
+    .sheet { position: relative; z-index: 2; background: var(--bg); min-height: 100vh; min-height: 100svh; border-radius: 0 0 calc(var(--r) * 2) calc(var(--r) * 2); box-shadow: 0 1px 0 light-dark(rgb(0 0 0 / .04), #2a2a28) }
     .frame { width: min(var(--col), 100% - 40px); margin-inline: auto; padding: 28px 0 120px }
     .top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s4); margin-bottom: clamp(48px, 10vh, 96px) }
     .brand { font-weight: 500 }
@@ -196,7 +196,7 @@
   :root:has(main.me) { --pile-h: 160px }
   /* the bar under the sheet; its contents rise and brighten as the sheet slides off (--p: 0 → 1) */
   .under { position: fixed; left: 0; right: 0; bottom: 0; height: var(--under-h); z-index: 0; overflow: hidden; background: #0c0c0b; color: #8e8d87; font-size: 12.5px; --p: 0 }
-  .under-in { position: relative; z-index: 1; height: var(--bar-h); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; padding: 0 max(4vw, 20px); opacity: calc(.25 + var(--p) * .75); transform: translateY(calc((1 - var(--p)) * 45%)) scale(calc(.97 + var(--p) * .03)); transform-origin: 50% 100% }
+  .under-in { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: var(--bar-h); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; padding: 0 max(4vw, 20px); opacity: calc(.25 + var(--p) * .75); transform: translateY(calc((1 - var(--p)) * 45%)) scale(calc(.97 + var(--p) * .03)); transform-origin: 50% 100% }
   .under p { margin: 0 }
   .np { display: flex; align-items: center; gap: 10px; white-space: nowrap; overflow: hidden }
   .np .dim { color: #5a5a55 }
@@ -287,10 +287,19 @@
 .np > .dim { flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis }
 @media (max-width: 760px) { .np > .dim { display: none } }
 
-/* the Me footer's sticker pile, below the bar */
-.pile { position: absolute; left: 0; right: 0; top: var(--bar-h); bottom: 0; overflow: hidden; touch-action: none }
+/* the Me footer's sticker pile, resting on top of the bar */
+.pile { position: absolute; left: 0; right: 0; top: 0; bottom: var(--bar-h); overflow: hidden; touch-action: none }
 .pile .toy { position: absolute; left: 0; top: 0; cursor: grab; user-select: none; will-change: transform; opacity: 0; transition: opacity .3s var(--out) }
 .pile.live .toy { opacity: 1 }
 .pile .toy.held { cursor: grabbing; z-index: 2 }
 .pile .stk { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 2px 2px rgb(0 0 0 / .4)) drop-shadow(0 8px 10px rgb(0 0 0 / .35)); pointer-events: none }
 .pile .toy.held .stk { filter: drop-shadow(0 4px 4px rgb(0 0 0 / .4)) drop-shadow(0 18px 20px rgb(0 0 0 / .4)) }
+
+/* the nudge at the end of the page */
+.more { all: unset; position: fixed; z-index: 3; right: max(4vw, 20px); bottom: 20px; display: inline-flex; gap: 6px; align-items: center; font-size: 12px; color: var(--ink-3); cursor: pointer; opacity: 0; transform: translateY(6px); transition: opacity .6s var(--out), transform .6s var(--out), color .2s; pointer-events: none }
+.more.shown { opacity: 1; transform: none; pointer-events: auto }
+.more:hover { color: var(--ink) }
+.more:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px }
+.more .px { animation: nudge 2.4s var(--inout) infinite }
+@keyframes nudge { 50% { transform: translateY(3px) } }
+@media (prefers-reduced-motion: reduce) { .more .px { animation: none } }

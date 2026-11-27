@@ -1,5 +1,5 @@
 'use client';
-// The Me page's footer holds a pile of stickers. They drop in the first time the footer is uncovered;
+// The Me page's footer holds a pile of stickers, resting on the bar. They drop in the first time the footer opens;
 // pick one up and throw it, and they knock into each other. Only on Me.
 import { useEffect, useRef } from 'react';
 import { stickers, stickerSvg } from '@/lib/stickers';
@@ -8,7 +8,7 @@ type Body = { el: HTMLElement; r0: number; r: number; w: number; x: number; y: n
 
 export function Pile({ open }: { open: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
-  const api = useRef<{ drop: () => void } | null>(null);
+  const api = useRef<{ drop: () => void; kick: (p: number) => void } | null>(null);
   const dropped = useRef(false);
 
   useEffect(() => {
@@ -68,6 +68,8 @@ export function Pile({ open }: { open: boolean }) {
         bodies.forEach((b, i) => { b.x = 40 + ((W - 80) * (((i * 5) % bodies.length) + 0.5)) / bodies.length; b.y = -b.r - (i % 4) * 50; b.vx = ((i * 7) % 5) - 2; b.vy = 2; b.a = b.tilt * 3; });
         draw(); arena.classList.add('live'); run();
       },
+      // every later opening gives them a little hop
+      kick: (p: number) => { if (still) return; bodies.forEach((b) => { b.vy -= p * (0.6 + Math.random() * 0.8); b.vx += (Math.random() - 0.5) * p * 0.9; }); run(); },
     };
 
     let grab: Body | null = null;
@@ -91,7 +93,8 @@ export function Pile({ open }: { open: boolean }) {
   }, []);
 
   useEffect(() => {
-    if (open && !dropped.current) { dropped.current = true; api.current?.drop(); }
+    if (!open) return;
+    if (!dropped.current) { dropped.current = true; api.current?.drop(); } else api.current?.kick(7);
   }, [open]);
 
   return (

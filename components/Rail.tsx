@@ -1,12 +1,17 @@
 'use client';
 // Ticks beside the column, one per section; the name slides out on hover. Also fills the audit stepper as you read down it.
 // After Jesper Vos.
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 export function Rail() {
   const ref = useRef<HTMLDivElement>(null);
+  const [host, setHost] = useState<HTMLElement | null>(null);
+  // lives on <body>, so it stays put when the page lifts off the footer
+  useEffect(() => setHost(document.body), []);
   useEffect(() => {
-    const rail = ref.current!;
+    const rail = ref.current;
+    if (!rail) return;
     const prose = document.getElementById('prose');
     if (!prose) return;
     const secs = () => [...prose.querySelectorAll('h2')] as HTMLElement[];
@@ -38,6 +43,7 @@ export function Rail() {
     mo.observe(prose, { childList: true });
     build(); fill();
     return () => { removeEventListener('scroll', onScroll); mo.disconnect(); };
-  }, []);
-  return <nav className="rail" aria-label="On this page"><div id="rail" ref={ref} /></nav>;
+  }, [host]);
+  if (!host) return null;
+  return createPortal(<nav className="rail" aria-label="On this page"><div id="rail" ref={ref} /></nav>, host);
 }
