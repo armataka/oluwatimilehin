@@ -53,7 +53,6 @@ export default config({
       schema: {
         rows: fields.array(fields.object({ label: line('Label'), value: line('Value') }), { label: 'What the site is made of', itemLabel: (p) => p.fields.label.value || 'Row' }),
         credits: fields.array(fields.object({ label: line('What'), name: line('Who'), url: fields.url({ label: 'Link' }) }), { label: 'After', itemLabel: (p) => p.fields.label.value || 'Credit' }),
-        thanks: fields.array(fields.object({ name: line('Name'), url: fields.url({ label: 'Link' }) }), { label: 'With thanks', itemLabel: (p) => p.fields.name.value || 'Name' }),
       },
     }),
   },
