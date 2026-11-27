@@ -229,7 +229,7 @@
   .pron:hover .spk, .pron.play .spk { opacity: 1; transform: none }
 
 
-  .thumb { flex: none; width: 56px; height: 40px; border-radius: 5px; display: grid; grid-template-columns: 10px 1fr; grid-template-rows: 8px 1fr 6px; gap: 3px; padding: 4px; overflow: hidden; box-shadow: 0 0 0 1px light-dark(rgb(0 0 0 / .06), rgb(255 255 255 / .07)), 0 1px 1px -.5px rgb(0 0 0 / .06), 0 3px 3px -1.5px rgb(0 0 0 / .06), 0 6px 6px -3px rgb(0 0 0 / .05); transition: transform .5s var(--out) }
+  .thumb { flex: none; width: 80px; height: 56px; border-radius: 5px; display: grid; grid-template-columns: 10px 1fr; grid-template-rows: 8px 1fr 6px; gap: 3px; padding: 4px; overflow: hidden; box-shadow: 0 0 0 1px light-dark(rgb(0 0 0 / .06), rgb(255 255 255 / .07)), 0 1px 1px -.5px rgb(0 0 0 / .06), 0 3px 3px -1.5px rgb(0 0 0 / .06), 0 6px 6px -3px rgb(0 0 0 / .05); transition: transform .5s var(--out) }
   .thumb i { border-radius: 1.5px }
   .thumb i:nth-child(1) { grid-row: 1 / 4 }
   .thumb i:nth-child(3) { grid-column: 2 }
@@ -238,14 +238,14 @@
   .thumb.kita { background: #f2f3f7 } .thumb.kita i:nth-child(1) { background: #151a3a } .thumb.kita i:nth-child(2) { background: #dde0f2 } .thumb.kita i:nth-child(3) { background: #fff } .thumb.kita i:nth-child(4) { background: #e9ebf6 }
   .thumb.brydge { background: #f3f5f2 } .thumb.brydge i:nth-child(1) { background: #fff; box-shadow: 0 0 0 1px #e3e7e1 } .thumb.brydge i:nth-child(2) { background: #57b36b } .thumb.brydge i:nth-child(3) { background: #fff } .thumb.brydge i:nth-child(4) { background: #e5f2e8 }
   a:hover .thumb { transform: translateY(-2px) }
-  @media (max-width: 480px) { .thumb { width: 48px; height: 34px } }
+  @media (max-width: 480px) { .thumb { width: 60px; height: 42px } }
 
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%) }
 .home .intro p { margin-bottom: var(--s4) }
 .home section + section { margin-top: var(--s6) }
 .home .label { margin-bottom: var(--s3) }
 .home .list { list-style: none; margin: 0; padding: 0 }
-.home .row { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 10px 0 }
+.home .row { display: grid; grid-template-columns: 80px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 10px 0 }
 .home .txt { display: grid; line-height: 1.45 }
 .home .nm { display: inline-flex; align-items: center; gap: 8px; font-weight: 500 }
 .home .t { background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 1px; padding-bottom: 1px; transition: background-size .5s var(--out) }
@@ -256,7 +256,7 @@
 .home .row:hover .yr { color: var(--ink-2) }}
 .home .note { font-size: 12.5px; margin: var(--s3) 0 0 }
 .home .links { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); margin: 0; font-weight: 500 }
-@media (max-width: 480px){.home .row { grid-template-columns: 48px minmax(0, 1fr) auto; gap: 12px }
+@media (max-width: 480px){.home .row { grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px }
 }
 .me h1 { font-size: 22px; line-height: 1.3; letter-spacing: -.012em }
 .me .say-line { margin: var(--s2) 0 var(--s6) }
@@ -282,7 +282,7 @@
 .kit .kv dd { margin: 0 }
 @media (max-width: 600px){.kit .kv div { grid-template-columns: 1fr; gap: 0 }}
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%) }
-.thumb.img { padding: 0; object-fit: cover; display: block }
+.thumb.img { padding: 0; object-fit: cover; object-position: left top; display: block; background: var(--wash) }
 .np > span { flex: none }
 .np > .dim { flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis }
 @media (max-width: 760px) { .np > .dim { display: none } }
