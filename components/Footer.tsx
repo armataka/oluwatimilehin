@@ -3,13 +3,17 @@
 // no thresholds, no snapping. The bar's contents rise and brighten as they're uncovered.
 // After Emmanuel Hong's Hidden Footer (emmanuelhong.com/explorations/hidden-footer).
 import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Icon } from './Icon';
+import { Pile } from './Pile';
 
 type Theme = 'auto' | 'light' | 'dark';
 
 export function Footer() {
   const ref = useRef<HTMLElement>(null);
   const [theme, setTheme] = useState<Theme>('auto');
+  const [shown, setShown] = useState(false);
+  const onMe = (usePathname() ?? '').startsWith('/me');
 
   useEffect(() => {
     const t = document.documentElement.dataset.theme;
@@ -32,6 +36,7 @@ export function Footer() {
       const left = document.documentElement.scrollHeight - (scrollY + innerHeight); // px of page still below the fold
       const p = Math.max(0, Math.min(1, 1 - left / h));
       el.style.setProperty('--p', p.toFixed(3));
+      if (p > 0.35) setShown(true);
     };
     const ask = () => { if (!raf) raf = requestAnimationFrame(paint); };
     paint();
@@ -63,6 +68,7 @@ export function Footer() {
           <a className="fi" href="https://www.emmanuelhong.com/explorations/hidden-footer">Footer after Emmanuel Hong<Icon name="external-link" size={13} /></a>
         </p>
       </div>
+      {onMe ? <Pile open={shown} /> : null}
     </footer>
   );
 }

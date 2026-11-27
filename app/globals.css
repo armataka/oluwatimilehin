@@ -192,10 +192,11 @@
   .steps .ret { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font: 500 10.5px/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); border: 1px solid var(--line); border-radius: 4px; padding: 4px 6px 3px }
 
 
-  :root { --under-h: 64px }
+  :root { --bar-h: 64px; --pile-h: 0px; --under-h: calc(var(--bar-h) + var(--pile-h)) }
+  :root:has(main.me) { --pile-h: 160px }
   /* the bar under the sheet; its contents rise and brighten as the sheet slides off (--p: 0 → 1) */
   .under { position: fixed; left: 0; right: 0; bottom: 0; height: var(--under-h); z-index: 0; overflow: hidden; background: #0c0c0b; color: #8e8d87; font-size: 12.5px; --p: 0 }
-  .under-in { height: 100%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; padding: 0 max(4vw, 20px); opacity: calc(.25 + var(--p) * .75); transform: translateY(calc((1 - var(--p)) * 45%)) scale(calc(.97 + var(--p) * .03)); transform-origin: 50% 100% }
+  .under-in { position: relative; z-index: 1; height: var(--bar-h); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; padding: 0 max(4vw, 20px); opacity: calc(.25 + var(--p) * .75); transform: translateY(calc((1 - var(--p)) * 45%)) scale(calc(.97 + var(--p) * .03)); transform-origin: 50% 100% }
   .under p { margin: 0 }
   .np { display: flex; align-items: center; gap: 10px; white-space: nowrap; overflow: hidden }
   .np .dim { color: #5a5a55 }
@@ -212,7 +213,7 @@
   .fi { display: inline-flex; align-items: center; gap: 6px }
   .fi .px { color: #5f5e59 }
   @media (max-width: 760px) {
-    :root { --under-h: 104px }
+    :root { --bar-h: 104px } :root:has(main.me) { --pile-h: 140px }
     .under-in { grid-template-columns: 1fr auto; grid-template-rows: auto auto; row-gap: 12px; align-content: center }
     .bar-meta { grid-column: 1 / -1; justify-content: flex-start; flex-wrap: wrap; gap: 8px 16px }
   }
@@ -267,19 +268,12 @@
 .me .plays .no { font: 12px/1.62 var(--mono); color: var(--ink-3) }
 .me .plays p { margin: 0 }
 .me .plays p + p { margin-top: 2px }
-.me .board-wrap { margin: var(--s5) 0 0 }
-.me .board { position: relative; height: 340px; border-radius: var(--r); background: var(--wash); overflow: hidden; touch-action: none }
-.me .stick { position: absolute; left: var(--x); top: var(--y); width: var(--w); transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(calc(var(--rot) + var(--tilt, 0) * 1deg)) scale(var(--s, 1)); cursor: grab; transition: transform .6s var(--spring); will-change: transform }
-.me .stick.held { transition: none; cursor: grabbing; z-index: 5 }
-.me .stick .stk { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 1px 1px rgb(0 0 0 / .18)) drop-shadow(0 4px 6px rgb(0 0 0 / .12)); transition: filter .3s var(--out); pointer-events: none }
-.me .stick.held .stk, .me .stick:hover .stk { filter: drop-shadow(0 2px 2px rgb(0 0 0 / .16)) drop-shadow(0 14px 18px rgb(0 0 0 / .2)) }
-.me .board-cap { display: flex; justify-content: center; align-items: center; gap: 6px; margin: var(--s2) 0 0; font-size: 12.5px; min-height: 1.5em }
 .me .now { margin-top: var(--s6) }
 .me .kv { display: grid; gap: var(--s3); margin: 0 }
 .me .kv div { display: grid; grid-template-columns: 110px 1fr; gap: var(--s3) }
 .me .kv dd { margin: 0 }
 .me .hello { display: flex; flex-wrap: wrap; gap: 4px 20px }
-@media (max-width: 600px){.me .board { height: 420px }
+@media (max-width: 600px){
 .me .kv div { grid-template-columns: 1fr; gap: 0 }}
 .kit h1 { font-size: 22px; line-height: 1.3; letter-spacing: -.012em; margin-bottom: var(--s5) }
 .kit .lbl { margin: var(--s6) 0 var(--s4) }
@@ -292,4 +286,11 @@
 .np > span { flex: none }
 .np > .dim { flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis }
 @media (max-width: 760px) { .np > .dim { display: none } }
-.me .stick { left: min(var(--x), calc(100% - var(--w) - 12px)) }
+
+/* the Me footer's sticker pile, below the bar */
+.pile { position: absolute; left: 0; right: 0; top: var(--bar-h); bottom: 0; overflow: hidden; touch-action: none }
+.pile .toy { position: absolute; left: 0; top: 0; cursor: grab; user-select: none; will-change: transform; opacity: 0; transition: opacity .3s var(--out) }
+.pile.live .toy { opacity: 1 }
+.pile .toy.held { cursor: grabbing; z-index: 2 }
+.pile .stk { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 2px 2px rgb(0 0 0 / .4)) drop-shadow(0 8px 10px rgb(0 0 0 / .35)); pointer-events: none }
+.pile .toy.held .stk { filter: drop-shadow(0 4px 4px rgb(0 0 0 / .4)) drop-shadow(0 18px 20px rgb(0 0 0 / .4)) }

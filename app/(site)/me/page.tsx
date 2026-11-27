@@ -2,20 +2,11 @@ import type { Metadata } from 'next';
 import { getSite, reader } from '@/lib/content';
 import { Pronounce } from '@/components/Pronounce';
 import { Icon } from '@/components/Icon';
-import { Board } from '@/components/Board';
-import { stickers, stickerSvg } from '@/lib/stickers';
 
 export const metadata: Metadata = { title: 'Me: Oluwatimilehin Odunlami' };
 
-// where each sticker sits on the board: x%, y%, rotation
-const place: Record<string, [number, number, number]> = { ticket: [6, 14, -6], helmet: [38, 6, 5], football: [70, 10, -8], basketball: [84, 52, 6], pick: [30, 58, -14], pow: [52, 46, 4], baseball: [12, 62, 10], gridiron: [64, 66, -10], tennis: [90, 14, 12], badge: [2, 40, -4], sheet: [44, 20, -3] };
-
 export default async function Me() {
   const [site, me] = await Promise.all([getSite(), reader.singletons.me.readOrThrow()]);
-  const items = (stickers as { id: string; label: string; r: number; w?: number }[]).map((s) => {
-    const [x, y, rot] = place[s.id] ?? [50, 50, 0];
-    return { id: s.id, label: s.label, svg: stickerSvg(s), x, y, rot, w: (s.w ?? 1) * s.r * 2.3 };
-  });
   return (
     <main className="me">
       <h1 data-r><span className="w5">{site.first}</span> <span className="s3">is Yoruba for “{site.meaning}”.</span></h1>
@@ -34,12 +25,6 @@ export default async function Me() {
         </ol>
       </section>
 
-      <section aria-labelledby="oc">
-        <h2 id="oc" className="lbl s3" data-r>Off the clock</h2>
-        <p data-r className="s2">{me.offTheClock}</p>
-      </section>
-
-      <Board items={items} />
 
       <section className="now" aria-labelledby="rn">
         <h2 id="rn" className="lbl s3" data-r>Right now</h2>
@@ -53,6 +38,11 @@ export default async function Me() {
           </dd></div>
         </dl>
       </section>
+      <section aria-labelledby="oc">
+        <h2 id="oc" className="lbl s3" data-r>Off the clock</h2>
+        <p data-r className="s2">{me.offTheClock}</p>
+      </section>
+
     </main>
   );
 }
