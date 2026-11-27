@@ -21,10 +21,9 @@ export default async function Home() {
       <section aria-labelledby="w">
         <h2 id="w" className="label s3" data-r>Projects</h2>
         <ul className="list">
-          {projects.map((w, i) => (
+          {projects.map((w) => (
             <li key={w.slug} data-r>
               <a className="row" href={`/work/${w.slug}`}>
-                <span className="no s3 num">{String(i + 1).padStart(2, '0')}</span>
                 <Thumb kind={w.thumb} src={w.thumbnail} />
                 <span className="txt">
                   <span className="nm"><span className="t">{w.name}</span>{w.locked ? <span className="tag">Locked</span> : null}</span>
