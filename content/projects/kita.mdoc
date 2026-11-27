@@ -31,8 +31,6 @@ Kita serves divisions that work very differently. Operations runs inventory acro
 
 Alongside those: fleet tracking, fuel requests, issues, a stack list, depot insights and an exchange-rate tool.
 
-{% Figure label="Design system: tables, filters and report layouts" caption="" ratio="16 / 10" /%}
-
 ## Ton-kilometres: the module used every day
 
 A tonne-kilometre is one tonne of cargo moved one kilometre. It’s how Asiko measures freight work: what deliveries cost, how its own fleet compares with third-party trucks, and how each truck performs against its target.
@@ -43,9 +41,9 @@ I split the module into an input and an output. **Trips** is where an officer lo
 
 I kept Trips close to the spreadsheet officers already knew: a dense table with filters, because that’s how they think about the work.
 
-{% Figure label="Trips: the table officers log deliveries in" caption="" ratio="16 / 10" /%}
+{% Figure src="/media/kita/trips.webp" label="Trips: the table officers log deliveries in" caption="Close to the spreadsheet officers already knew: one row per trip, with the cargo, payload pattern and tonne-kilometres worked out." /%}
 
-{% Figure label="Performance report" caption="" ratio="16 / 10" /%}
+{% Figure src="/media/kita/report.webp" label="The tonne-kilometre performance report" caption="The figures Logistics and Finance plan with, and each fleet against its budget." /%}
 
 {% Stats items=[{value: "Daily", label: "Trips logged by Logistics"}, {value: "Weekly", label: "Feeds the EXCO report"}, {value: "2", label: "Divisions plan with it"}] /%}
 
@@ -55,19 +53,21 @@ Kita has a lot of reports, and the CEO wanted oversight across many of them at a
 
 Instead of designing one, I turned the charts, metrics and stats from across Kita into widgets, and gave him a dashboard he can add to, rearrange and edit himself. There are more than fifteen widgets now, and he uses it.
 
-{% Figure label="Build-your-own dashboard: adding a widget" caption="" ratio="16 / 10" /%}
+{% Figure src="/media/kita/dashboard.webp" label="The CEO’s dashboard, built from widgets" caption="Widgets drawn from reports across Kita, which the CEO adds, arranges and edits himself." /%}
 
 ## Comparing like with like
 
 The CEO’s quarterly reports to the board need context. In this business, performance is judged against similar periods under similar conditions, so his idea was to compare them side by side: the current period against the prior one, and actual against budget, in one view. The charts didn’t share a layout, so no single comparison pattern fitted them all.
 
-{% Figure label="Period comparison matrix" caption="" ratio="16 / 10" /%}
-
 ## Contracts, and the 53 laptops
 
 Contracts started as a request for a simple tracker. Talking to legal, procurement and operations showed the real problem was obligations: renewal dates, payments and deadlines that nobody was reminded about. So I designed contract management instead: a directory, a detail view with activity, revisions, payments and documents, reusable contract types, one shared list of counterparties, and reminders. Licences and permits followed.
 
+{% Figure src="/media/kita/contract.webp" label="A contract’s detail page" caption="Where a contract stands, what’s been paid and what’s due next, on one page." /%}
+
 In Assets, staff were registering 53 identical laptops one at a time. Separating products (the make and model) from units (each physical laptop) fixed that, and shaped every view after it.
+
+{% Figure src="/media/kita/products.webp" label="Assets: products, each with its own units" caption="A product is registered once; each physical unit hangs off it." /%}
 
 ## What hasn’t landed
 
