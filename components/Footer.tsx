@@ -48,7 +48,7 @@ export function Footer() {
     const lenis = () => (window as unknown as { __lenis?: { targetScroll: number; limit: number } }).__lenis;
     const STEP = 32, IDLE = 180, MS = 300;
 
-    let isOpen = false, wheel = 0, idle = 0, fromEnd = false, lastWheel = 0, peeked = false;
+    let isOpen = false, wheel = 0, idle = 0, peeked = false;
     // at the end of the page (with smooth scrolling, where the scroll is heading), or a page too short to scroll
     const atBottom = () => {
       const l = lenis();
@@ -63,7 +63,7 @@ export function Footer() {
       under.style.setProperty('--p', o ? '1' : '0');
     };
     const setOpen = (o: boolean) => {
-      wheel = 0; clearTimeout(idle);
+      wheel = 0;
       if (o === isOpen) return;
       isOpen = o; setOpenState(o); play(o ? 'open' : 'close');
       if (o && !peeked) { peeked = true; setPeek(true); }
@@ -73,18 +73,18 @@ export function Footer() {
     };
     ctl.current = { setOpen };
 
+    let swallow = false;   // after a close, the rest of that same scroll is eaten, so the page doesn't move
     const onWheel = (e: WheelEvent) => {
-      const now = performance.now(), gap = now - lastWheel; lastWheel = now;
       const dy = e.deltaY * (e.deltaMode === 1 ? 16 : 1);
-      // a gesture that began while scrolling down the page doesn't carry on into the footer
-      if (gap > IDLE) fromEnd = isOpen || atBottom();
-      if (!isOpen && (!atBottom() || !fromEnd)) { wheel = 0; return; }
+      const eat = () => { e.preventDefault(); e.stopImmediatePropagation(); clearTimeout(idle); idle = window.setTimeout(() => { wheel = 0; swallow = false; }, IDLE); };
+      if (swallow) { eat(); return; }
+      // until the page is at its end, the wheel scrolls the page; after that, it adds up toward the footer
+      if (!isOpen && !atBottom()) { wheel = 0; return; }
       if (!isOpen && dy < 0) { wheel = 0; return; }   // scrolling back up the page
-      e.preventDefault();
-      clearTimeout(idle); idle = window.setTimeout(() => { wheel = 0; }, IDLE);
+      eat();                                          // the smooth scroller never sees it
       wheel += dy;
       if (wheel > STEP) setOpen(true);
-      else if (wheel < -STEP) setOpen(false);
+      else if (wheel < -STEP) { setOpen(false); swallow = true; }
     };
     let ty: number | null = null;
     const onTouchStart = (e: TouchEvent) => { ty = atBottom() || isOpen ? e.touches[0].clientY : null; };
@@ -102,7 +102,7 @@ export function Footer() {
     const onScroll = () => setHint(!isOpen && atBottom());
     const onResize = () => { if (isOpen) paint(true); onScroll(); };
 
-    addEventListener('wheel', onWheel, { passive: false });
+    addEventListener('wheel', onWheel, { passive: false, capture: true });   // ahead of the smooth scroller
     addEventListener('touchstart', onTouchStart, { passive: true });
     addEventListener('touchend', onTouchEnd);
     addEventListener('keydown', onKey);
@@ -111,7 +111,7 @@ export function Footer() {
     sheet.addEventListener('click', onSheetClick, true);
     const t0 = window.setTimeout(onScroll, 1200);
     return () => {
-      removeEventListener('wheel', onWheel); removeEventListener('touchstart', onTouchStart); removeEventListener('touchend', onTouchEnd);
+      removeEventListener('wheel', onWheel, { capture: true }); removeEventListener('touchstart', onTouchStart); removeEventListener('touchend', onTouchEnd);
       removeEventListener('keydown', onKey); removeEventListener('scroll', onScroll); removeEventListener('resize', onResize);
       sheet.removeEventListener('click', onSheetClick, true);
       clearTimeout(idle); clearTimeout(t0);
