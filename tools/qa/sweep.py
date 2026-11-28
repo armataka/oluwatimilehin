@@ -1,4 +1,5 @@
-# Every page, light and dark, desktop and phone, locked and unlocked: page errors, console errors, failed requests, overflow.
+# Every page, light and dark, desktop and phone, locked and unlocked: page errors, console errors, failed requests, overflow,
+# and the pointer: everything you can click shows the hand (no question mark, no arrow).
 # Needs the site running on :3100 with CASE_PASSWORD=pw.
 import asyncio, json
 from playwright.async_api import async_playwright
@@ -21,6 +22,10 @@ async def run(p, vp, scheme, unlocked):
         # elements wider than the viewport or off-screen to the right
         wide = await pg.evaluate("""[...document.querySelectorAll('.sheet *')].filter(e=>{const r=e.getBoundingClientRect(); return r.width>0 && r.right>innerWidth+1 && getComputedStyle(e).position!=='fixed'}).slice(0,5).map(e=>e.className.toString().slice(0,40)+' '+Math.round(e.getBoundingClientRect().right))""")
         if wide: issues.append(('beyond-right', path, wide))
+        cur = await pg.evaluate("""[...document.querySelectorAll('a, button, [role=radio], [role=button], [tabindex]:not([tabindex="-1"]), summary, label[for]')]
+          .filter(e => e.getBoundingClientRect().width && !e.disabled && getComputedStyle(e).cursor !== 'pointer')
+          .slice(0, 5).map(e => (e.innerText || e.getAttribute('aria-label') || e.className).toString().trim().split('\\n')[0].slice(0, 30) + ': ' + getComputedStyle(e).cursor)""")
+        if cur: issues.append(('cursor', path, cur))
     await b.close()
     return issues
 async def main():
