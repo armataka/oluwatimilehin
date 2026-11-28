@@ -16,7 +16,8 @@ function Pixels({ w, h, draw, unit = 3 }: { w: number; h: number; draw: Draw; un
     const frame = (now: number) => {
       g.clearRect(0, 0, c.width, c.height);
       g.fillStyle = getComputedStyle(c).color;
-      draw(now - t0, (x, y, ww = 1, hh = 1) => g.fillRect(Math.round(x) * s, Math.round(y) * s, ww * s, hh * s));
+      draw(Math.max(0, now - t0), (x, y, ww = 1, hh = 1) =>   // the first frame's timestamp can be a hair before t0
+        g.fillRect(Math.round(x) * s, Math.round(y) * s, ww * s, hh * s));
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
@@ -62,7 +63,7 @@ const tetris: Draw = (t, put) => {
   const durs = TF.map((f) => (f.land + 1) * FALL + (f.clears.length ? FLASH : 0) + 60);
   const total = durs.reduce((a, b) => a + b, 0);
   let k = t % total, i = 0;
-  while (k > durs[i]) { k -= durs[i]; i++; }
+  while (i < TF.length - 1 && k > durs[i]) { k -= durs[i]; i++; }
   const f = TF[i], fallT = (f.land + 1) * FALL;
   const cell = (cx: number, cy: number) => put(1 + cx * CELL, 1 + cy * CELL, CELL - (CELL > 1 ? 0 : 0), CELL);
   f.board.forEach((r, y) => r.forEach((on, x) => { if (on) cell(x, y); }));
