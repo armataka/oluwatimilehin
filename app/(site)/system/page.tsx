@@ -55,7 +55,7 @@ export default function System() {
           <li><span className="t-label">02</span><span>Space is a multiple of 7: 14 between paragraphs, 84 between sections.</span></li>
           <li><span className="t-label">03</span><span>Gold, from the coin, is the only colour that reacts: hover, focus, where you are.</span></li>
           <li><span className="t-label">04</span><span>Other colour means status, or a project inside its own thumbnail. Never decoration.</span></li>
-          <li><span className="t-label">05</span><span>4px corners on everything small; round for dots and chips. One line weight, one shadow, screens only.</span></li>
+          <li><span className="t-label">05</span><span>4px corners on everything small; round for dots and chips; 24.5px on the page as it lifts off the footer. One line weight, one shadow, screens only.</span></li>
           <li><span className="t-label">06</span><span>Mono capitals for small structural labels: nav, tags, chips, buttons, details. No dot separators.</span></li>
         </ol>
       </section>
@@ -90,7 +90,7 @@ export default function System() {
         </div>
       </Block>
 
-      <Block name="Shape and depth" use="4px corners, one 1px line, one shadow for screens.">
+      <Block name="Shape and depth" use="4px corners, one 1px line, one shadow for screens. The page itself rounds to 24.5px when the footer opens.">
         <div className="sys-demo shapes t-small">
           <div><i style={{ borderRadius: 'var(--r)' }} /><span>4px corners</span></div>
           <div><i style={{ background: 'none', border: 'var(--hair)', borderRadius: 'var(--r)' }} /><span>1px line</span></div>
@@ -254,15 +254,15 @@ export default function System() {
         </div>
       </Block>
 
-      <Block name="Footer bar" use="Always dark. Opens and closes with Emmanuel Hong's gesture.">
+      <Block name="Footer bar" use="Always dark: the name on the left, the switches in the middle, what I'm listening to on the right. Opens with Emmanuel Hong's gesture; the page's corners round to 24.5px as it lifts.">
         <div className="bar t-small">
-          <span className="fi"><Icon name="music" size={14} />Nothing playing</span>
+          <span>© Oluwatimilehin Odunlami 2026</span>
           <div className="seg" role="radiogroup" aria-label="Theme">
             <button type="button" role="radio" aria-checked="true" aria-label="System"><Icon name="monitor" size={16} /></button>
             <button type="button" role="radio" aria-checked="false" aria-label="Light"><Icon name="sun" size={16} /></button>
             <button type="button" role="radio" aria-checked="false" aria-label="Dark"><Icon name="moon" size={16} /></button>
           </div>
-          <span className="fi end"><Icon name="clock" size={14} />Lagos 20:57</span>
+          <span className="fi end"><Icon name="music" size={14} />Nothing playing</span>
         </div>
       </Block>
     </main>

@@ -12,7 +12,7 @@ import { play, soundOn } from './Sound';
 
 type Theme = 'auto' | 'light' | 'dark';
 
-export function Footer() {
+export function Footer({ name }: { name: string }) {
   const ref = useRef<HTMLElement>(null);
   const [theme, setTheme] = useState<Theme>('auto');
   const [open, setOpenState] = useState(false);
@@ -57,8 +57,10 @@ export function Footer() {
     };
     const paint = (o: boolean) => {
       // Emmanuel's timing: 300ms; the sheet eases out as it lifts and in-out as it comes back; the bar eases out in, eases in out
-      sheet.style.transition = `transform ${MS}ms ${o ? 'cubic-bezier(0, 0, .2, 1)' : 'cubic-bezier(.4, 0, .2, 1)'}`;
+      const ease = o ? 'cubic-bezier(0, 0, .2, 1)' : 'cubic-bezier(.4, 0, .2, 1)';
+      sheet.style.transition = `transform ${MS}ms ${ease}, border-radius ${MS}ms ${ease}`;
       sheet.style.transform = o ? `translate3d(0, ${-under.offsetHeight}px, 0)` : '';
+      sheet.style.borderRadius = o ? '0 0 24.5px 24.5px' : '';
       under.style.setProperty('--ease', o ? 'cubic-bezier(0, 0, .2, 1)' : 'cubic-bezier(.4, 0, 1, 1)');
       under.style.setProperty('--p', o ? '1' : '0');
     };
@@ -132,11 +134,7 @@ export function Footer() {
       <footer className="under" ref={ref} aria-label="Footer">
         {onMe ? <Pile peek={peekd} open={open} /> : null}
         <div className="under-in">
-          <p className={`np${np?.playing ? ' live' : ''}`}><span className="note-ic"><Icon name="music" size={16} /></span>
-            {np?.title ? (
-              <><span>{np.playing ? 'Listening to' : 'Last played'}</span>{np.url ? <a href={np.url} className="dim">{np.title}<span className="by">{np.artist}</span></a> : <span className="dim">{np.title}<span className="by">{np.artist}</span></span>}</>
-            ) : <span>Nothing playing</span>}
-          </p>
+          <p className="bar-meta"><span>© {name} <span suppressHydrationWarning>{new Date().getFullYear()}</span></span></p>
           <div className="ctrls">
         <button type="button" className="snd" aria-pressed={sound} aria-label={sound ? 'Sound on. Turn it off' : 'Sound off. Turn it on'} onClick={toggleSound}>
           <Icon name={sound ? 'volume-2' : 'volume-x'} size={16} />
@@ -149,8 +147,10 @@ export function Footer() {
             ))}
           </div>
         </div>
-          <p className="bar-meta">
-            <span className="fi"><Icon name="clock" size={14} />Lagos <time data-clock suppressHydrationWarning /></span>
+          <p className={`np${np?.playing ? ' live' : ''}`}><span className="note-ic"><Icon name="music" size={16} /></span>
+            {np?.title ? (
+              <><span>{np.playing ? 'Listening to' : 'Last played'}</span>{np.url ? <a href={np.url} className="dim">{np.title}<span className="by">{np.artist}</span></a> : <span className="dim">{np.title}<span className="by">{np.artist}</span></span>}</>
+            ) : <span>Nothing playing</span>}
           </p>
         </div>
       </footer>

@@ -42,7 +42,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
           {children}
         </div>
       </div>
-      <Footer />
+      <Footer name={site.name} />
       <div className="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged image"><img alt="" id="lb-img" /></div>
       <Runtime />
       <Sound />

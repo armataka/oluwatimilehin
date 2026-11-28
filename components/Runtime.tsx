@@ -1,5 +1,5 @@
 'use client';
-// Page-wide behaviour: smooth scrolling, the blur-in reveal, the Lagos clock, the image lightbox and the loader (on arrival and on every reload).
+// Page-wide behaviour: smooth scrolling, the blur-in reveal, the Lagos clock (on Me), the image lightbox and the loader (on arrival and on every reload).
 import { useEffect } from 'react';
 import Lenis from 'lenis';
 
