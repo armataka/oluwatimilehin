@@ -39,6 +39,7 @@
   /* shape */
   --r: 4px; --r-thumb: 2px; --r-page: 24.5px; --r-full: 999px;
   --hair: 1px solid var(--line);
+  --ul: color-mix(in srgb, var(--ink) 30%, transparent);   /* the underline every text link wears */
   --shadow-screen: 0 0 0 1px light-dark(rgb(0 0 0 / .07), rgb(255 255 255 / .08)), 0 1px 2px rgb(0 0 0 / .04), 0 10px 28px -14px rgb(0 0 0 / .22);
   /* layout */
   --col: 680px;
@@ -77,16 +78,16 @@ a { color: inherit; text-decoration: none }
 /* ============================== links ============================== */
 /* every text hover is the same: a quiet underline that pulls away when you point at it (Email, LinkedIn,
    the nav, the logo, project names, arrow links, breadcrumbs). The one exception is the name's dotted underline. */
-.link, .u-in, .nav a, .brand, .row-name .nm, .pn .nm, .mods a .nm, .crumbs a, .link-go > span { padding-bottom: 1px;
-  background: linear-gradient(color-mix(in srgb, currentColor 30%, transparent), color-mix(in srgb, currentColor 30%, transparent)) no-repeat 100% 100% / 100% 1px;
-  transition: background-size var(--slow) var(--ease), color var(--fast) var(--ease) }
+.link, .u-in, .nav a, .brand, .row-name .nm, .pn .nm, .mods a .nm, .crumbs a, .link-go > span, .more > span, #rail a span, .np a.dim > span { padding-bottom: 1px;
+  background: linear-gradient(var(--ul), var(--ul)) no-repeat 100% 100% / 100% 1px; transition: background-size var(--slow) var(--ease) }
 .link { color: var(--ink) }
-.link:hover, .u-in:hover, .nav a:hover, .brand:hover, .crumbs a:hover, .link-go:hover > span, .pn a:hover .nm, .mods a:hover .nm { background-size: 0% 1px }
+.link:hover, .u-in:hover, .nav a:hover, .brand:hover, .crumbs a:hover, .link-go:hover > span, .pn a:hover .nm, .mods a:hover .nm,
+.more:hover > span, #rail a:hover span, .np a.dim:hover > span { background-size: 0% 1px }
 @media (hover: hover) { .row:hover .nm { background-size: 0% 1px } }
 /* a link that goes somewhere: the arrow nudges forward too */
 .link-go { display: inline-flex; align-items: center; gap: 6px; color: var(--ink) }
-.link-go .px { color: var(--ink-3); transition: color var(--fast) var(--ease), transform var(--base) var(--ease) }
-.link-go:hover .px { color: currentColor; transform: translateX(3px) }
+.link-go .px { color: var(--ink-3); transition: transform var(--base) var(--ease) }
+.link-go:hover .px { transform: translateX(3px) }
 .links { display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-2) }
 .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; color: var(--ink-3); margin-bottom: var(--sp-2) }
 .crumbs a { color: var(--ink-3); transition: color var(--fast) var(--ease) }
@@ -100,8 +101,7 @@ a { color: inherit; text-decoration: none }
 .top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-3); margin-bottom: clamp(var(--sp-6), 10vh, var(--sp-7)) }
 .brand { font-weight: 600; color: var(--ink) }
 .nav { display: flex; gap: var(--sp-3) }
-.nav a { color: var(--ink-3); font: 500 11px/14px var(--mono); letter-spacing: .06em; text-transform: uppercase; transition: color var(--fast) var(--ease) }
-.nav a:hover { color: var(--ink) }
+.nav a { color: var(--ink-3); font: 500 11px/14px var(--mono); letter-spacing: .06em; text-transform: uppercase }
 .nav a[aria-current] { color: var(--ink) }
 @media (max-width: 480px) { .nav { gap: var(--sp-2) } }
 
@@ -205,8 +205,7 @@ a { color: inherit; text-decoration: none }
 .row-name { display: flex; align-items: center; gap: var(--sp-1) }
 .row-name .nm { font-weight: 600; color: var(--ink); transition: color var(--fast) var(--ease) }
 .row-line { display: block; color: var(--ink-2) }
-.row-year { color: var(--ink-3); transition: color var(--fast) var(--ease) }
-@media (hover: hover) { .row:hover .row-year { color: var(--ink-2) } }
+.row-year { color: var(--ink-3) }
 @media (max-width: 480px) { .row { grid-template-columns: 56px minmax(0, 1fr) auto } }
 /* key and value */
 .kv { display: grid; gap: var(--sp-1); margin: 0 }
@@ -284,8 +283,7 @@ a { color: inherit; text-decoration: none }
 .mods .t-label { color: var(--ink-3) }
 .mods .nm { font-weight: 600; transition: color var(--fast) var(--ease) }
 .mods .ln { display: block; color: var(--ink-2) }
-.mods .px { color: var(--ink-3); transition: color var(--fast) var(--ease), transform var(--base) var(--ease); align-self: center }
-.mods a:hover .px { color: var(--ink) }
+.mods .px { color: var(--ink-3); transition: transform var(--base) var(--ease); align-self: center }
 .mods a:hover .px { transform: translateX(3px) }
 
 /* previous / next: thumbnail and name only */
@@ -340,10 +338,10 @@ a { color: inherit; text-decoration: none }
 #rail a i { order: 2; flex: none; display: block; height: 2px; width: 12px; border-radius: 1px; background: var(--line); transition: width .5s var(--ease), background .3s }
 #rail a.on i { width: 21px; background: var(--ink) }
 #rail a:hover i { width: 21px; background: var(--ink-2) }
-#rail a span { order: 1; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-3); font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
-  opacity: 0; transform: translateX(6px); filter: blur(3px); transition: opacity .3s var(--ease), transform .45s var(--ease), filter .3s var(--ease), color .2s }
+#rail a span { order: 1; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-3); font: 500 11px/14px var(--mono); letter-spacing: .06em; text-transform: uppercase;
+  opacity: 0; transform: translateX(6px); filter: blur(3px); transition: opacity .3s var(--ease), transform .45s var(--ease), filter .3s var(--ease), background-size var(--slow) var(--ease) }
 #rail a.on span { opacity: 1; transform: none; filter: none; color: var(--ink) }
-#rail a:hover span { opacity: 1; transform: none; filter: none; color: var(--ink-2) }
+#rail a:hover span { opacity: 1; transform: none; filter: none }
 @media (max-width: 1240px) { .rail { display: none } }
 /* the NDA gate: a line, then one field */
 .gate { margin-top: var(--sp-5); max-width: 420px }
@@ -396,7 +394,7 @@ a:hover .thumb.art, a:focus-visible .thumb.art { filter: none }
 :root { --bar-h: 63px; --pile-h: 0px; --under-h: calc(var(--bar-h) + var(--pile-h)) }
 :root:has(main.me) { --pile-h: 160px }
 /* the bar under the sheet; it rises into view as the sheet lifts (--p: 0 → 1). It reaches 25px up behind the page's rounded corners. */
-.under { position: fixed; left: 0; right: 0; bottom: 0; height: calc(var(--under-h) + 25px); z-index: 0; overflow: hidden; background: var(--f-bg); color: var(--f-ink-2); font: 400 12.5px/18px var(--sans); --p: 0 }
+.under { --ul: color-mix(in srgb, var(--f-ink) 30%, transparent); position: fixed; left: 0; right: 0; bottom: 0; height: calc(var(--under-h) + 25px); z-index: 0; overflow: hidden; background: var(--f-bg); color: var(--f-ink-2); font: 400 12.5px/18px var(--sans); --p: 0 }
 .under-in { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: var(--bar-h); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--sp-3); padding: 0 max(4vw, var(--sp-3));
   opacity: var(--p); transform: translateY(calc((1 - var(--p)) * 8px)); transition: opacity .3s var(--ease, ease), transform .3s var(--ease, ease) }
 .under p { margin: 0 }
@@ -412,7 +410,7 @@ a:hover .thumb.art, a:focus-visible .thumb.art { filter: none }
 .np { display: flex; align-items: center; justify-content: flex-end; gap: 10px; white-space: nowrap; overflow: hidden; justify-self: end; max-width: 100% }
 .np > span { flex: none }
 .np .dim { flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; color: var(--f-ink-3) }
-.np a.dim { color: #b9b8b2; transition: color .2s } .np a.dim:hover { color: #1ed760 }
+.np a.dim { color: #b9b8b2 }
 .np .by { margin-left: var(--sp-1); color: #6f6e69 }
 .note-ic { display: inline-grid; color: #1ed760; animation: bob 1.6s var(--inout) infinite }
 .np:not(.live) .note-ic { animation: none; color: var(--f-ink-3) }
@@ -434,9 +432,8 @@ a:hover .thumb.art, a:focus-visible .thumb.art { filter: none }
 .pile .toy.held .stk { filter: drop-shadow(0 4px 4px rgb(0 0 0 / .4)) drop-shadow(0 18px 20px rgb(0 0 0 / .4)) }
 
 /* the nudge at the end of the page */
-.more { all: unset; position: fixed; z-index: 3; right: max(4vw, 20px); bottom: 20px; display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--ink-3); cursor: pointer; opacity: 0; transform: translateY(6px); transition: opacity .6s var(--out), transform .6s var(--out), color .2s; pointer-events: none }
+.more { all: unset; position: fixed; z-index: 3; right: max(4vw, 20px); bottom: 20px; display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--ink-3); cursor: pointer; opacity: 0; transform: translateY(6px); transition: opacity .6s var(--out), transform .6s var(--out); pointer-events: none }
 .more.shown { opacity: 1; transform: none; pointer-events: auto }
-.more:hover { color: var(--ink) }
 .more:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px }
 .more .px { animation: nudge 2.4s var(--inout) infinite }
 @keyframes nudge { 50% { transform: translateY(3px) } }

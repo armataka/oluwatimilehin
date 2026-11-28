@@ -133,7 +133,7 @@ export function Footer({ name }: { name: string }) {
   return (
     <>
       <button type="button" className={`more${hint ? ' shown' : ''}`} onClick={() => ctl.current?.setOpen(true)} tabIndex={hint ? 0 : -1}>
-        There’s more underneath <Icon name="arrow-down" size={14} />
+        <span>There’s more underneath</span> <Icon name="arrow-down" size={14} />
       </button>
       <footer className="under" ref={ref} aria-label="Footer">
         {onMe ? <Pile peek={peekd} open={open} /> : null}
@@ -153,7 +153,7 @@ export function Footer({ name }: { name: string }) {
         </div>
           <p className={`np${np?.playing ? ' live' : ''}`}><span className="note-ic"><Icon name="music" size={16} /></span>
             {np?.title ? (
-              <><span>{np.playing ? 'Listening to' : 'Last played'}</span>{np.url ? <a href={np.url} className="dim">{np.title}<span className="by">{np.artist}</span></a> : <span className="dim">{np.title}<span className="by">{np.artist}</span></span>}</>
+              <><span>{np.playing ? 'Listening to' : 'Last played'}</span>{np.url ? <a href={np.url} className="dim"><span>{np.title}</span><span className="by">{np.artist}</span></a> : <span className="dim">{np.title}<span className="by">{np.artist}</span></span>}</>
             ) : <span>Nothing playing</span>}
           </p>
         </div>
