@@ -36,6 +36,7 @@ export default config({
           label: 'Introduction',
           itemLabel: (p) => p.value.slice(0, 48) || 'Paragraph',
         }),
+        more: line('“More about me” link', 'The words of the link under the introduction'),
         openTo: line('Closing line (optional)', 'Shown before “More about me”'),
       },
     }),

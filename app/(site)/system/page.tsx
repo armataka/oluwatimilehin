@@ -46,7 +46,7 @@ export default function System() {
     <main className="ds">
       <div className="eyebrow t-label"><span>System</span><span>Version 2</span></div>
       <h1 className="t-display">The UI system</h1>
-      <p className="lede">Type and spacing learned from Sesan: Inter at 14 on a 21px line, hierarchy by weight rather than size, a 7px rhythm, one narrow column. Every page is built from what&rsquo;s here and nothing else.</p>
+      <p className="lede">Type and spacing learned from Sesan: Inter at 14 on a 21px line, hierarchy by weight rather than size, a 7px rhythm, one 680px column. Every page is built from what&rsquo;s here and nothing else.</p>
 
       <section className="sec">
         <h2 className="t-heading">Rules</h2>
@@ -55,7 +55,7 @@ export default function System() {
           <li><span className="t-label">02</span><span>Space is a multiple of 7: 14 between paragraphs, 84 between sections.</span></li>
           <li><span className="t-label">03</span><span>Gold, from the coin, is the only colour that reacts: hover, focus, where you are.</span></li>
           <li><span className="t-label">04</span><span>Other colour means status, or a project inside its own thumbnail. Never decoration.</span></li>
-          <li><span className="t-label">05</span><span>4px corners on everything small; round for dots and chips; 24.5px on the page as it lifts off the footer. One line weight, one shadow, screens only.</span></li>
+          <li><span className="t-label">05</span><span>4px corners on screens and small parts, 2px on thumbnails and the email box; round for dots and chips; 24.5px on the page as it lifts off the footer. One line weight, one shadow, screens only.</span></li>
           <li><span className="t-label">06</span><span>Mono capitals for small structural labels: nav, tags, chips, buttons, details. No dot separators.</span></li>
         </ol>
       </section>
@@ -144,11 +144,11 @@ export default function System() {
         </div>
       </Block>
 
-      <Block name="Project rows" use="Point at a row: the name turns gold, the thumbnail takes its colour. The tag doesn't react.">
+      <Block name="Project rows" use="Point at a row: the name turns gold and the thumbnail takes its colour, without moving. Thumbnails have 2px corners.">
         <div className="sys-demo">
           <ul className="rows">
-            <li><a className="row" href="#"><Thumb kind="tama" /><span><span className="row-name"><span className="nm">TAMA</span><span className="tag t-label">Locked</span></span><span className="row-line">Tax audit management for a state revenue authority</span></span><span className="row-year num">2025–26</span></a></li>
-            <li><a className="row" href="#"><Thumb kind="kita" /><span><span className="row-name"><span className="nm">Kita</span><span className="tag t-label">Locked</span></span><span className="row-line">The platform an energy company runs its operations on</span></span><span className="row-year num">2024–26</span></a></li>
+            <li><a className="row" href="#"><Thumb kind="tama" /><span><span className="row-name"><span className="nm">TAMA</span></span><span className="row-line">Tax audit management for a state revenue authority</span></span><span className="row-year num">2025–26</span></a></li>
+            <li><a className="row" href="#"><Thumb kind="kita" /><span><span className="row-name"><span className="nm">Kita</span></span><span className="row-line">The platform an energy company runs its operations on</span></span><span className="row-year num">2024–26</span></a></li>
             <li><a className="row" href="#"><Thumb kind="brydge" /><span><span className="row-name"><span className="nm">Brydge</span></span><span className="row-line">Payments for a cross-border trade platform</span></span><span className="row-year num">2024</span></a></li>
           </ul>
         </div>

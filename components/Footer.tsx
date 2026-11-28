@@ -59,7 +59,7 @@ export function Footer({ name }: { name: string }) {
       // Emmanuel's timing: 300ms; the sheet eases out as it lifts and in-out as it comes back; the bar eases out in, eases in out
       const ease = o ? 'cubic-bezier(0, 0, .2, 1)' : 'cubic-bezier(.4, 0, .2, 1)';
       sheet.style.transition = `transform ${MS}ms ${ease}, border-radius ${MS}ms ${ease}`;
-      sheet.style.transform = o ? `translate3d(0, ${-under.offsetHeight}px, 0)` : '';
+      sheet.style.transform = o ? `translate3d(0, ${-(under.offsetHeight - 25)}px, 0)` : '';   // the bar's height (the footer reaches 25px further up, behind the corners)
       sheet.style.borderRadius = o ? '0 0 24.5px 24.5px' : '';
       under.style.setProperty('--ease', o ? 'cubic-bezier(0, 0, .2, 1)' : 'cubic-bezier(.4, 0, 1, 1)');
       under.style.setProperty('--p', o ? '1' : '0');
