@@ -77,10 +77,10 @@
     .loading .loader { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--bg); animation: ld-out .7s var(--out) 2.05s forwards }
     .ld { position: relative; width: 104px; height: 104px }
     .ld svg { position: absolute; inset: -14px; width: calc(100% + 28px); height: calc(100% + 28px); overflow: visible }
-    .ld-disc { fill: #121110; animation: ld-gone .35s var(--out) 1.4s forwards }
-    .ld-line { fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50px 50px; animation: ld-gone .35s var(--out) 1.5s forwards; filter: drop-shadow(0 0 3px rgb(147 176 255 / .55)) }
+    .ld-disc { fill: light-dark(#f2f2f0, #121110); animation: ld-gone .35s var(--out) 1.4s forwards }
+    .ld-line { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50px 50px; animation: ld-gone .35s var(--out) 1.5s forwards; filter: drop-shadow(0 0 3px rgb(147 176 255 / .55)) }
     .ld-orbit { animation: ld-gone .25s linear 1.42s forwards }
-    .ld-ember { fill: #fff; filter: drop-shadow(0 0 3px #c9d6ff) drop-shadow(0 0 9px #93b0ff) drop-shadow(0 0 18px rgb(33 66 197 / .8)) }
+    .ld-ember { fill: var(--ink); filter: drop-shadow(0 0 3px #c9d6ff) drop-shadow(0 0 9px #93b0ff) drop-shadow(0 0 18px rgb(33 66 197 / .8)) }
     .ld-flash { fill: none; stroke: #93b0ff; stroke-width: 2; opacity: 0; transform-origin: 50px 50px; animation: ld-flash .6s var(--out) 1.42s forwards }
     .ld-coin { position: absolute; inset: 0; border-radius: 50%; opacity: 0; transform: scale(.86); animation: ld-coin .55s var(--out) 1.42s forwards }
     @keyframes ld-gone { to { opacity: 0 } }
