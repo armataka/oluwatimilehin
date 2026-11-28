@@ -38,14 +38,14 @@ export function Gate({ slug, sections }: { slug: string; sections: number }) {
     <section aria-labelledby="g-h" data-r>
       <div className={`gate ${state === 'done' || state === 'leaving' ? 'done' : ''} ${state}`}>
       <p className="g-h" id="g-h"><span className="tag">Locked</span>The rest is under NDA</p>
-      <p className="g-sub s2">{sections} more sections. The password is on my résumé.</p>
+      <p className="g-sub">{sections} more sections. The password is on my résumé.</p>
       <form className="g-form" onSubmit={submit}>
         <label className="g-field">
           <Icon name="key" size={16} />
           <span className="sr">Password</span>
           <input ref={input} name="password" type="password" placeholder="Password" autoComplete="current-password" spellCheck={false}
             value={pw} onChange={(e) => { setPw(e.target.value); if (state === 'err') setState(''); setMsg(''); }} />
-          <button className="g-go" type="submit" disabled={!pw} aria-label="Unlock">
+          <button className="btn icon g-go" type="submit" disabled={!pw} aria-label="Unlock">
             <Icon name="arrow-right" size={16} className="i-go" />
             <Icon name="loader" size={16} className="i-load" />
             <Icon name="check" size={16} className="i-ok" />

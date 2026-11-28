@@ -52,14 +52,14 @@ export default async function Project({ params }: Props) {
       <article className="cbody">
         <header className="chead">
           <p className="eyebrow" data-r><span>{p.name}</span><span>{p.year}</span>{gated ? <span className="tag tag-lock">Locked</span> : null}</p>
-          <h1 data-r>{p.headline}</h1>
+          <h1 className="t-display" data-r>{p.headline}</h1>
         </header>
         {/* the details: inline under the title on smaller screens, a sticky column to the right on wide ones */}
         <aside className="meta-wrap" aria-label="Project details">
-          <dl className="meta" data-r>
+          <dl className="kv stack" data-r>
             {p.meta.map((m, k) => (
               <div key={k}>
-                <dt>{m.label}</dt>
+                <dt className="t-label">{m.label}</dt>
                 <dd>{m.label.toLowerCase() === 'status' ? <Status value={m.value} /> : m.value}</dd>
               </div>
             ))}
@@ -72,14 +72,14 @@ export default async function Project({ params }: Props) {
         <nav className="pn" aria-label="More projects" data-r>
           {prev ? (
             <a className="pv" href={`/work/${prev.slug}`}>
-              <span className="s3">Previous</span>
-              <span className="pn-r"><Thumb kind={prev.thumb} src={prev.thumbnail} /><span className="w5 nt">{prev.name}</span></span>
+              <span className="t-label">Previous</span>
+              <span className="pn-r"><Thumb kind={prev.thumb} src={prev.thumbnail} /><span className="nm">{prev.name}</span></span>
             </a>
           ) : <span />}
           {next ? (
             <a className="nx" href={`/work/${next.slug}`}>
-              <span className="s3">Next</span>
-              <span className="pn-r"><span className="w5 nt">{next.name}</span><Thumb kind={next.thumb} src={next.thumbnail} /></span>
+              <span className="t-label">Next</span>
+              <span className="pn-r"><span className="nm">{next.name}</span><Thumb kind={next.thumb} src={next.thumbnail} /></span>
             </a>
           ) : null}
         </nav>

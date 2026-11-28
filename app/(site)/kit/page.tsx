@@ -8,14 +8,15 @@ export default async function Kit() {
   const [site, kit] = await Promise.all([getSite(), reader.singletons.kit.readOrThrow()]);
   return (
     <main className="kit">
-      <h1 data-r><span className="w5">Kit</span> <span className="s3">What this site is made of, and who it borrows from.</span></h1>
+      <h1 className="t-display" data-r>Kit</h1>
+      <p className="lede" data-r>What this site is made of, and who it borrows from.</p>
       <dl className="kv" data-r>
-        {kit.rows.map((r, i) => (<div key={i}><dt className="s3">{r.label}</dt><dd>{r.value}</dd></div>))}
-        <div><dt className="s3">Updated</dt><dd>{site.updated}</dd></div>
+        {kit.rows.map((r, i) => (<div key={i}><dt className="t-label">{r.label}</dt><dd>{r.value}</dd></div>))}
+        <div><dt className="t-label">Updated</dt><dd>{site.updated}</dd></div>
       </dl>
-      <h2 className="lbl s3" data-r>After</h2>
+      <h2 className="t-heading" data-r>After</h2>
       <dl className="kv" data-r>
-        {kit.credits.map((c, i) => (<div key={i}><dt className="s3">{c.label}</dt><dd><a className="ic" href={c.url ?? '#'}><span className="u">{c.name}</span><Icon name="external-link" size={13} /></a></dd></div>))}
+        {kit.credits.map((c, i) => (<div key={i}><dt className="t-label">{c.label}</dt><dd><a className="link-go" href={c.url ?? '#'}>{c.name}<Icon name="external-link" size={13} /></a></dd></div>))}
       </dl>
     </main>
   );

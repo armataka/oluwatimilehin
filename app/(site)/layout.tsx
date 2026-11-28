@@ -1,3 +1,4 @@
+import '@fontsource-variable/inter';
 import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/500.css';
 import '../globals.css';
@@ -7,7 +8,6 @@ import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Runtime } from '@/components/Runtime';
 import { Sound } from '@/components/Sound';
-import { SoundAsk } from '@/components/SoundAsk';
 import { CoinFace } from '@/components/CoinFace';
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -47,7 +47,6 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <div className="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged image"><img alt="" id="lb-img" /></div>
       <Runtime />
       <Sound />
-      <SoundAsk />
     </>
   );
 }

@@ -1,8 +1,6 @@
 // The UI system, on one page: every token and component the site is built from.
 // Not linked from anywhere and not indexed; it's for reviewing the system before it replaces the old styles.
 import type { Metadata } from 'next';
-import '@fontsource-variable/inter';
-import '../../ds.css';
 import { Icon } from '@/components/Icon';
 import { Thumb } from '@/components/Thumb';
 
@@ -43,7 +41,7 @@ function Block({ name, use, children }: { name: string; use: string; children: R
 
 export default function System() {
   return (
-    <main className="ds">
+    <main className="sys">
       <div className="eyebrow t-label"><span>System</span><span>Version 2</span></div>
       <h1 className="t-display">The UI system</h1>
       <p className="lede">Type and spacing learned from Sesan: Inter at 14 on a 21px line, hierarchy by weight rather than size, a 7px rhythm, one 680px column. Every page is built from what&rsquo;s here and nothing else.</p>
