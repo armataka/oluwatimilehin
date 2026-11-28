@@ -2,14 +2,21 @@
 // Small, quiet interface sounds, made on the fly with the Web Audio API (no files to load).
 // A soft tick when you point at something you can press, a click when you press it, a clink when the coin flips,
 // sand when it lifts, a whoosh when the footer opens and a chime when a case study unlocks. After Noel (nemaas.com).
-// Browsers only allow sound after your first click or key press; the footer has a mute switch, remembered.
+// Sound is off until you say yes (the first-visit prompt, or the switch in the footer); the choice is remembered.
+// Browsers only allow sound after a click or key press, which both of those are.
 import { useEffect } from 'react';
 
 type Name = 'tick' | 'press' | 'coin' | 'sand' | 'open' | 'close' | 'unlock';
 
 let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
-export const soundOn = () => { try { return localStorage.getItem('sound') !== 'off'; } catch { return true; } };
+export const soundOn = () => { try { return localStorage.getItem('sound') === 'on'; } catch { return false; } };
+/** Turn sound on or off, remember it, and tell anything showing a switch. Call from a click so the browser allows audio. */
+export function setSound(on: boolean) {
+  try { localStorage.setItem('sound', on ? 'on' : 'off'); } catch {}
+  if (on) audio();
+  window.dispatchEvent(new CustomEvent('soundchange', { detail: on }));
+}
 
 function audio() {
   if (!ctx) {

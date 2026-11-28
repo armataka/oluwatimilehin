@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Icon } from './Icon';
 import { Pile } from './Pile';
-import { play, soundOn } from './Sound';
+import { play, soundOn, setSound as saveSound } from './Sound';
 
 type Theme = 'auto' | 'light' | 'dark';
 
@@ -24,8 +24,12 @@ export function Footer({ name }: { name: string }) {
     load(); const iv = setInterval(load, 60000); return () => clearInterval(iv);
   }, []);
   const [sound, setSound] = useState(true);
-  useEffect(() => setSound(soundOn()), []);
-  const toggleSound = () => { const n = !sound; try { localStorage.setItem('sound', n ? 'on' : 'off'); } catch {} setSound(n); if (n) play('press'); };
+  useEffect(() => {
+    setSound(soundOn());
+    const on = (e: Event) => setSound(!!(e as CustomEvent).detail);
+    addEventListener('soundchange', on); return () => removeEventListener('soundchange', on);
+  }, []);
+  const toggleSound = () => { const n = !sound; saveSound(n); if (n) play('press'); };
   const ctl = useRef<{ setOpen: (o: boolean) => void } | null>(null);
   const onMe = (usePathname() ?? '').startsWith('/me');
 
