@@ -51,7 +51,7 @@
     :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px }
 
     /* the sheet sits over the footer */
-    .sheet { position: relative; z-index: 2; background: var(--bg); min-height: 100vh; min-height: 100svh; border-radius: 0 0 calc(var(--r) * 2) calc(var(--r) * 2); box-shadow: 0 1px 0 light-dark(rgb(0 0 0 / .04), #2a2a28) }
+    .sheet { position: relative; z-index: 2; background: var(--bg); min-height: 100vh; min-height: 100svh; border-radius: 0 0 4px 4px; box-shadow: 0 1px 0 light-dark(rgb(0 0 0 / .04), #2a2a28) }
     .frame { width: min(var(--col), 100% - 40px); margin-inline: auto; padding: 28px 0 120px }
     .top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s4); margin-bottom: clamp(48px, 10vh, 96px) }
     .brand { font-weight: 600 }
@@ -195,10 +195,11 @@
   :root:has(main.me) { --pile-h: 160px }
   /* the bar under the sheet; its contents rise and brighten as the sheet slides off (--p: 0 → 1) */
   .under { position: fixed; left: 0; right: 0; bottom: 0; height: var(--under-h); z-index: 0; overflow: hidden; background: #0c0c0b; color: #8e8d87; font-size: 12.5px; --p: 0 }
-  .under-in { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: var(--bar-h); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; padding: 0 max(4vw, 20px); opacity: calc(.25 + var(--p) * .75); transform: translateY(calc((1 - var(--p)) * 45%)) scale(calc(.97 + var(--p) * .03)); transform-origin: 50% 100% }
+  .under-in { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: var(--bar-h); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; padding: 0 max(4vw, 20px); opacity: var(--p); transform: translateY(calc((1 - var(--p)) * 8px)); transition: opacity .3s var(--ease, ease), transform .3s var(--ease, ease); transform-origin: 50% 100% }
   .under p { margin: 0 }
   .np { display: flex; align-items: center; gap: 10px; white-space: nowrap; overflow: hidden }
   .np .dim { color: #5a5a55 }
+  .np .by { margin-left: 8px; color: #6f6e69 }
   .note-ic { display: inline-grid; color: #1ed760; animation: bob 1.6s var(--inout) infinite }
   @keyframes bob { 50% { transform: translateY(-2px) } }
   .theme { display: flex; gap: 2px; padding: 3px; border-radius: 6px; background: #181817 }
@@ -413,7 +414,6 @@ a:hover .thumb.art, a:focus-visible .thumb.art { filter: none }
 @media (hover: hover) {
   .home .row:hover .t { color: var(--pj, var(--accent)) }
   .home .row:hover .yr { color: var(--pj, var(--accent)) }
-  .home .row:hover .tag { color: var(--pj); border-color: color-mix(in srgb, var(--pj) 40%, transparent) }
   .u:hover { color: var(--accent) }
   .links .u:nth-child(1):hover { color: var(--c-pink) } .links .u:nth-child(2):hover { color: var(--c-blue) } .links .u:nth-child(3):hover { color: var(--c-tama) }
   .hello a:nth-child(1):hover { color: var(--c-pink) } .hello a:nth-child(2):hover { color: var(--c-blue) } .hello a:nth-child(3):hover { color: var(--c-tama) }
@@ -439,7 +439,7 @@ a:hover .thumb.art, a:focus-visible .thumb.art { filter: none }
 .loop-ticks .on i::after { content: ''; position: absolute; inset: 0; background: var(--ink); transform-origin: left; animation: loop-fill 2.8s linear both }
 .loop:hover .loop-ticks .on i::after { animation: none }
 @keyframes loop-fill { from { transform: scaleX(0) } }
-.loop-cap { font: 500 10.5px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3) }
+.loop-cap { display: inline-flex; gap: 8px; font: 500 10.5px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase; color: var(--ink-3) }
 
 /* ---- easter eggs ---- */
 .egg-rain { position: fixed; inset: 0; z-index: 90; pointer-events: none; overflow: hidden }
@@ -452,3 +452,6 @@ a:hover .thumb.art, a:focus-visible .thumb.art { filter: none }
 .np:not(.live) .note-ic { animation: none; color: #5a5a55 }
 @media (max-width: 760px) { .np > .dim { display: inline; max-width: 46vw } }
 
+
+/* a browser that has unlocked the work doesn't see Locked tags */
+.unlocked .tag-lock { display: none }

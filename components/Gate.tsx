@@ -19,6 +19,8 @@ export function Gate({ slug, sections }: { slug: string; sections: number }) {
       const r = await fetch('/api/unlock', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ password: pw, slug }) });
       if (r.ok) {
         setState('done'); window.dispatchEvent(new CustomEvent('sfx', { detail: 'unlock' }));
+        // remember it in this browser for as long as the unlock lasts (30 days): the Locked tags disappear
+        try { localStorage.setItem('unlocked', String(Date.now() + 30 * 864e5)); document.documentElement.classList.add('unlocked'); } catch {}
         setTimeout(() => setState('leaving'), 650);
         setTimeout(() => router.refresh(), 1100);
         return;

@@ -28,7 +28,7 @@ export default async function Home() {
               <a className={`row pj-${w.thumb}`} href={`/work/${w.slug}`}>
                 <Thumb kind={w.thumb} src={w.thumbnail} />
                 <span className="txt">
-                  <span className="nm"><span className="t">{w.name}</span>{w.locked ? <span className="tag">Locked</span> : null}</span>
+                  <span className="nm"><span className="t">{w.name}</span>{w.locked ? <span className="tag tag-lock">Locked</span> : null}</span>
                   <span className="ln s2">{w.line}</span>
                 </span>
                 <span className="yr s3 num">{w.year}</span>

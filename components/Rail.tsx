@@ -44,8 +44,10 @@ export function Rail() {
       const l0 = a.top + a.height / 2 - r.top, l1 = r.bottom - (b.top + b.height / 2);
       ol.style.setProperty('--l0', `${l0.toFixed(1)}px`); ol.style.setProperty('--l1', `${l1.toFixed(1)}px`);
       const span = r.height - l0 - l1;
-      ol.style.setProperty('--p', Math.max(0, Math.min(1, (y - r.top - l0) / span)).toFixed(3));
-      ol.querySelectorAll('.st').forEach((st) => st.classList.toggle('on', st.getBoundingClientRect().top + 14 < y));
+      // the line and the dots only ever move forward: once you've reached a step it stays filled
+      const p = Math.max(0, Math.min(1, (y - r.top - l0) / span)), was = +(ol.style.getPropertyValue('--p') || 0);
+      ol.style.setProperty('--p', Math.max(p, was).toFixed(3));
+      ol.querySelectorAll('.st').forEach((st) => { if (st.getBoundingClientRect().top + 14 < y) st.classList.add('on'); });
     });
     let raf = 0;
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; mark(); fill(); }); };

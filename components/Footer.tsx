@@ -1,8 +1,9 @@
 'use client';
-// The page is a sheet lying on a dark bar. At the end of the page, keep scrolling and the sheet lifts with you,
-// against a little resistance. Push past the line and it springs open; stop short and it settles back.
-// Scroll up, press Escape or click the page to close it.
-// After Emmanuel Hong's Hidden Footer (emmanuelhong.com/explorations/hidden-footer).
+// The page is a sheet lying on a dark bar. The gesture is Emmanuel Hong's Hidden Footer
+// (emmanuelhong.com/explorations/hidden-footer), exactly: at the end of the page, wheel movement adds up and
+// resets after 180ms of stillness. Past 32px down, the sheet lifts and the bar rises into view; past 32px up,
+// it closes. A swipe of more than 32px does the same on touch, and so do the arrow keys. Both move over 300ms.
+// Escape or a click on the page also closes it.
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Icon } from './Icon';
@@ -44,92 +45,65 @@ export function Footer() {
     const under = ref.current!;
     const sheet = document.querySelector<HTMLElement>('.sheet')!;
     const root = document.documentElement;
-    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const lenis = () => (window as unknown as { __lenis?: { targetScroll: number; limit: number } }).__lenis;
+    const STEP = 32, IDLE = 180, MS = 300;
 
-    let lift = 0, vel = 0, target = 0, isOpen = false, dragging = false, acc = 0, peeked = false;
-    let lastWheel = 0, lastDy = 0, idle = 0, raf = 0, ignoreUntil = 0, fromEnd = false;
-    const H = () => under.offsetHeight;
-    const T = () => Math.max(110, H() * 0.75); // how far past the end you push before it opens
-    // at the end of the page; with smooth scrolling, count from where the scroll is heading, so a push registers at once
+    let isOpen = false, wheel = 0, idle = 0, fromEnd = false, lastWheel = 0, peeked = false;
+    // at the end of the page (with smooth scrolling, where the scroll is heading), or a page too short to scroll
     const atBottom = () => {
       const l = lenis();
       if (l) return l.targetScroll >= l.limit - 1;
       return Math.ceil(scrollY + innerHeight) >= root.scrollHeight - 2;
     };
-    // rubber band: gives freely at first, then stiffens, and never passes the footer's height
-    const band = (a: number) => H() * 0.94 * (1 - Math.exp(-a / (T() * 1.15)));
-
-    const paint = () => {
-      sheet.style.transform = lift > 0.2 ? `translate3d(0,${(-lift).toFixed(2)}px,0)` : '';
-      under.style.setProperty('--p', Math.min(1, lift / H()).toFixed(3));
+    const paint = (o: boolean) => {
+      // Emmanuel's timing: 300ms; the sheet eases out as it lifts and in-out as it comes back; the bar eases out in, eases in out
+      sheet.style.transition = `transform ${MS}ms ${o ? 'cubic-bezier(0, 0, .2, 1)' : 'cubic-bezier(.4, 0, .2, 1)'}`;
+      sheet.style.transform = o ? `translate3d(0, ${-under.offsetHeight}px, 0)` : '';
+      under.style.setProperty('--ease', o ? 'cubic-bezier(0, 0, .2, 1)' : 'cubic-bezier(.4, 0, 1, 1)');
+      under.style.setProperty('--p', o ? '1' : '0');
     };
-    const tick = () => {
-      raf = 0;
-      if (still || dragging) { lift = target; vel = 0; paint(); return; } // under your fingers it moves exactly with you
-      vel += (target - lift) * 0.13; vel *= 0.76; lift += vel; paint();
-      if (Math.abs(target - lift) > 0.2 || Math.abs(vel) > 0.2) raf = requestAnimationFrame(tick);
-      else { lift = target; paint(); }
-    };
-    const go = () => { if (!raf) raf = requestAnimationFrame(tick); };
-
-    const peek = () => { if (!peeked) { peeked = true; setPeek(true); } };
     const setOpen = (o: boolean) => {
-      dragging = false; acc = 0; clearTimeout(idle);
-      target = o ? H() : 0; go();
+      wheel = 0; clearTimeout(idle);
       if (o === isOpen) return;
       isOpen = o; setOpenState(o); play(o ? 'open' : 'close');
+      if (o && !peeked) { peeked = true; setPeek(true); }
       root.classList.toggle('under-open', o);
-      ignoreUntil = performance.now() + 450; // swallow the rest of the push that opened or closed it
+      paint(o);
       setHint(!o && atBottom());
     };
     ctl.current = { setOpen };
 
-    const push = (a: number) => {
-      acc = a; dragging = true; peek();
-      if (acc >= T()) { setOpen(true); return; } // past the line: open now, don't wait for you to let go
-      target = band(acc); go();
-    };
-    const settle = () => { if (dragging) { dragging = false; acc = 0; target = 0; go(); } };
-
     const onWheel = (e: WheelEvent) => {
       const now = performance.now(), gap = now - lastWheel; lastWheel = now;
       const dy = e.deltaY * (e.deltaMode === 1 ? 16 : 1);
-      const decaying = gap < 60 && Math.abs(dy) < Math.abs(lastDy) * 0.97; // trackpad momentum: each event smaller than the last
-      lastDy = dy;
-      // a new gesture starts after a short pause; only one that starts at the end of the page can lift it,
-      // so flicking your way down to the end never opens the footer by accident
-      if (gap > 120) fromEnd = atBottom();
-      if (now < ignoreUntil) { if (isOpen && dy > 0) e.preventDefault(); return; }
-      if (isOpen) { if (dy < -3) setOpen(false); else e.preventDefault(); return; }
-      if (dy <= 0 || !atBottom()) { settle(); return; }
-      if (!fromEnd) return;
-      if (!dragging && decaying) return;          // coasting doesn't open it; a deliberate push does
-      if (dragging && decaying) { clearTimeout(idle); idle = window.setTimeout(settle, 60); return; } // you've let go: it settles back
-      push(acc + Math.min(dy, 60));
-      clearTimeout(idle); idle = window.setTimeout(settle, 120);
+      // a gesture that began while scrolling down the page doesn't carry on into the footer
+      if (gap > IDLE) fromEnd = isOpen || atBottom();
+      if (!isOpen && (!atBottom() || !fromEnd)) { wheel = 0; return; }
+      if (!isOpen && dy < 0) { wheel = 0; return; }   // scrolling back up the page
+      e.preventDefault();
+      clearTimeout(idle); idle = window.setTimeout(() => { wheel = 0; }, IDLE);
+      wheel += dy;
+      if (wheel > STEP) setOpen(true);
+      else if (wheel < -STEP) setOpen(false);
     };
     let ty: number | null = null;
     const onTouchStart = (e: TouchEvent) => { ty = atBottom() || isOpen ? e.touches[0].clientY : null; };
-    const onTouchMove = (e: TouchEvent) => {
+    const onTouchEnd = (e: TouchEvent) => {
       if (ty === null) return;
-      const dy = ty - e.touches[0].clientY;
-      if (isOpen) { if (dy < -24) { setOpen(false); ty = null; } return; }
-      if (dy > 0 && atBottom()) push(dy * 1.2);
+      const d = ty - (e.changedTouches[0]?.clientY ?? ty); ty = null;
+      if (Math.abs(d) > STEP) setOpen(d > 0);
     };
-    const onTouchEnd = () => { ty = null; settle(); };
     const onKey = (e: KeyboardEvent) => {
       if ((e.target as Element)?.closest?.('input, textarea')) return;
-      if (isOpen && ['Escape', 'ArrowUp', 'PageUp', 'Home'].includes(e.key)) { e.preventDefault(); setOpen(false); return; }
-      if (!isOpen && atBottom() && ['ArrowDown', 'PageDown', 'End', ' '].includes(e.key)) { e.preventDefault(); peek(); setOpen(true); }
+      if (isOpen && ['Escape', 'ArrowUp'].includes(e.key)) { e.preventDefault(); setOpen(false); return; }
+      if (!isOpen && atBottom() && e.key === 'ArrowDown') { e.preventDefault(); setOpen(true); }
     };
     const onSheetClick = (e: MouseEvent) => { if (isOpen) { e.preventDefault(); e.stopPropagation(); setOpen(false); } };
     const onScroll = () => setHint(!isOpen && atBottom());
-    const onResize = () => { if (isOpen) { target = H(); go(); } onScroll(); };
+    const onResize = () => { if (isOpen) paint(true); onScroll(); };
 
     addEventListener('wheel', onWheel, { passive: false });
     addEventListener('touchstart', onTouchStart, { passive: true });
-    addEventListener('touchmove', onTouchMove, { passive: true });
     addEventListener('touchend', onTouchEnd);
     addEventListener('keydown', onKey);
     addEventListener('scroll', onScroll, { passive: true });
@@ -137,10 +111,10 @@ export function Footer() {
     sheet.addEventListener('click', onSheetClick, true);
     const t0 = window.setTimeout(onScroll, 1200);
     return () => {
-      removeEventListener('wheel', onWheel); removeEventListener('touchstart', onTouchStart); removeEventListener('touchmove', onTouchMove);
-      removeEventListener('touchend', onTouchEnd); removeEventListener('keydown', onKey); removeEventListener('scroll', onScroll);
-      removeEventListener('resize', onResize); sheet.removeEventListener('click', onSheetClick, true);
-      clearTimeout(idle); clearTimeout(t0); cancelAnimationFrame(raf);
+      removeEventListener('wheel', onWheel); removeEventListener('touchstart', onTouchStart); removeEventListener('touchend', onTouchEnd);
+      removeEventListener('keydown', onKey); removeEventListener('scroll', onScroll); removeEventListener('resize', onResize);
+      sheet.removeEventListener('click', onSheetClick, true);
+      clearTimeout(idle); clearTimeout(t0);
     };
   }, []);
 
@@ -160,7 +134,7 @@ export function Footer() {
         <div className="under-in">
           <p className={`np${np?.playing ? ' live' : ''}`}><span className="note-ic"><Icon name="music" size={16} /></span>
             {np?.title ? (
-              <><span>{np.playing ? 'Listening to' : 'Last played'}</span>{np.url ? <a href={np.url} className="dim">{np.title} · {np.artist}</a> : <span className="dim">{np.title} · {np.artist}</span>}</>
+              <><span>{np.playing ? 'Listening to' : 'Last played'}</span>{np.url ? <a href={np.url} className="dim">{np.title}<span className="by">{np.artist}</span></a> : <span className="dim">{np.title}<span className="by">{np.artist}</span></span>}</>
             ) : <span>Nothing playing</span>}
           </p>
           <div className="ctrls">

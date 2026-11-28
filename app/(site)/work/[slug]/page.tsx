@@ -51,7 +51,7 @@ export default async function Project({ params }: Props) {
       <Rail />
       <article className="cbody">
         <header className="chead">
-          <p className="eyebrow" data-r><span>{p.name}</span><span aria-hidden="true">·</span><span>{p.year}</span>{p.locked ? <span className="tag">Locked</span> : null}</p>
+          <p className="eyebrow" data-r><span>{p.name}</span><span>{p.year}</span>{gated ? <span className="tag tag-lock">Locked</span> : null}</p>
           <h1 data-r>{p.headline}</h1>
         </header>
         {/* the details: inline under the title on smaller screens, a sticky column to the right on wide ones */}
@@ -73,13 +73,13 @@ export default async function Project({ params }: Props) {
           {prev ? (
             <a className="pv" href={`/work/${prev.slug}`}>
               <span className="s3">Previous</span>
-              <span className="pn-r"><Thumb kind={prev.thumb} src={prev.thumbnail} /><span><span className="w5 nt">{prev.name}</span><br /><span className="s2">{prev.line}</span></span></span>
+              <span className="pn-r"><Thumb kind={prev.thumb} src={prev.thumbnail} /><span className="w5 nt">{prev.name}</span></span>
             </a>
           ) : <span />}
           {next ? (
             <a className="nx" href={`/work/${next.slug}`}>
               <span className="s3">Next</span>
-              <span className="pn-r"><span><span className="w5 nt">{next.name}</span><br /><span className="s2">{next.line}</span></span><Thumb kind={next.thumb} src={next.thumbnail} /></span>
+              <span className="pn-r"><span className="w5 nt">{next.name}</span><Thumb kind={next.thumb} src={next.thumbnail} /></span>
             </a>
           ) : null}
         </nav>

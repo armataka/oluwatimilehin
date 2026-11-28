@@ -21,7 +21,7 @@ export function Loop({ items = [] }: { items: Item[] }) {
       </div>
       <figcaption>
         <span className="loop-ticks">{shots.map((s, k) => <button key={k} type="button" className={k === i ? 'on' : ''} aria-label={`Show: ${s.label ?? `screen ${k + 1}`}`} onClick={() => setI(k)}><i key={k === i && !hold ? `r${i}` : 'p'} /></button>)}</span>
-        <span className="loop-cap">{String(i + 1).padStart(2, '0')} · {shots[i].label}</span>
+        <span className="loop-cap"><span>{String(i + 1).padStart(2, '0')}</span><span>{shots[i].label}</span></span>
       </figcaption>
     </figure>
   );
