@@ -13,7 +13,6 @@ const COLOURS: [string, string][] = [
   ['--ink', 'Ink: everything you read'],
   ['--ink-2', 'Ink 2: second lines, captions'],
   ['--ink-3', 'Ink 3: labels, meta'],
-  ['--accent', 'Gold, from the coin: hover, focus, current'],
   ['--live-dot', 'Status: live'],
   ['--built-dot', 'Status: built'],
   ['--wip-dot', 'Status: in progress'],
@@ -51,7 +50,7 @@ export default function System() {
         <ol className="ol">
           <li><span className="t-label">01</span><span>Everything you read is 14px. Headings stand out by weight, not size. Only page titles and figures are bigger.</span></li>
           <li><span className="t-label">02</span><span>Space is a multiple of 7: 14 between paragraphs, 84 between sections.</span></li>
-          <li><span className="t-label">03</span><span>Gold, from the coin, is the only colour that reacts: hover, focus, where you are.</span></li>
+          <li><span className="t-label">03</span><span>Hovers are underlines, not colour: a link's underline pulls away; names, the nav and arrow links draw one in.</span></li>
           <li><span className="t-label">04</span><span>Other colour means status, or a project inside its own thumbnail. Never decoration.</span></li>
           <li><span className="t-label">05</span><span>4px corners on screens and small parts, 2px on thumbnails and the email box; round for dots and chips; 24.5px on the page as it lifts off the footer. One line weight, one shadow, screens only.</span></li>
           <li><span className="t-label">06</span><span>Mono capitals for small structural labels: nav, tags, chips, buttons, details. No dot separators.</span></li>
@@ -105,11 +104,11 @@ export default function System() {
       </Block>
 
       {/* ============================== components ============================== */}
-      <Block name="Links" use="Text links, links that go somewhere, the nav and breadcrumbs.">
+      <Block name="Links" use="A text link's underline pulls away on hover; arrow links, the nav and breadcrumbs draw one in.">
         <div className="sys-demo sys-row">
           <a className="link" href="#">Email</a>
           <a className="link" href="#">LinkedIn</a>
-          <a className="link-go" href="#">More about me<Icon name="arrow-right" size={14} /></a>
+          <a className="link-go" href="#"><span>More about me</span><Icon name="arrow-right" size={14} /></a>
           <nav className="nav t-label" aria-label="Example">
             <a className="nav-link" href="#" aria-current="page">Highlights</a><a className="nav-link" href="#">Me</a><a className="nav-link" href="#">Kit</a>
           </nav>
@@ -142,7 +141,7 @@ export default function System() {
         </div>
       </Block>
 
-      <Block name="Project rows" use="Point at a row: the name turns gold and the thumbnail takes its colour, without moving. Thumbnails have 2px corners.">
+      <Block name="Project rows" use="Point at a row: an underline draws in under the name and the thumbnail takes its colour, without moving. Thumbnails have 2px corners.">
         <div className="sys-demo">
           <ul className="rows">
             <li><a className="row" href="#"><Thumb kind="tama" /><span><span className="row-name"><span className="nm">TAMA</span></span><span className="row-line">Tax audit management for a state revenue authority</span></span><span className="row-year num">2025–26</span></a></li>

@@ -16,7 +16,7 @@ export default async function Kit() {
       </dl>
       <h2 className="t-heading" data-r>After</h2>
       <dl className="kv" data-r>
-        {kit.credits.map((c, i) => (<div key={i}><dt className="t-label">{c.label}</dt><dd><a className="link-go" href={c.url ?? '#'}>{c.name}<Icon name="external-link" size={13} /></a></dd></div>))}
+        {kit.credits.map((c, i) => (<div key={i}><dt className="t-label">{c.label}</dt><dd><a className="link-go" href={c.url ?? '#'}><span>{c.name}</span><Icon name="external-link" size={13} /></a></dd></div>))}
       </dl>
     </main>
   );

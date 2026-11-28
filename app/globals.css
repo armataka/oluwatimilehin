@@ -21,7 +21,7 @@
   --ink: light-dark(#0f0f0e, #efeee9);       /* everything you read */
   --ink-2: light-dark(#5c5c56, #a9a8a2);     /* second lines, captions */
   --ink-3: light-dark(#8a8a84, #77766f);     /* labels and meta */
-  --accent: light-dark(#9a6a1c, #e2b04f);    /* the coin's gold: every hover, focus, current */
+  --accent: var(--ink);                      /* focus rings and the lit syllable; hovers are underlines, not colour */
   --live-bg: light-dark(#ecfdf3, #0d2a1c); --live-fg: light-dark(#067647, #75e0a7); --live-line: light-dark(#abefc6, #155e3b); --live-dot: #17b26a;
   --built-bg: light-dark(#eff4ff, #101a33); --built-fg: light-dark(#1849a9, #9db6f5); --built-line: light-dark(#c7d7fe, #253a7a); --built-dot: #2e6ae6;
   --wip-bg: light-dark(#fffaeb, #2b1e05); --wip-fg: light-dark(#b54708, #fdb022); --wip-line: light-dark(#fedf89, #6a4508); --wip-dot: #f79009;
@@ -75,20 +75,24 @@ a { color: inherit; text-decoration: none }
 .num { font-variant-numeric: tabular-nums }
 
 /* ============================== links ============================== */
-/* a text link: a quiet underline that pulls away on hover while the text turns gold */
+/* a text link: a quiet underline that pulls away on hover */
 .link { color: var(--ink); padding-bottom: 1px;
   background: linear-gradient(color-mix(in srgb, currentColor 30%, transparent), color-mix(in srgb, currentColor 30%, transparent)) no-repeat 100% 100% / 100% 1px;
   transition: color var(--fast) var(--ease), background-size var(--slow) var(--ease) }
-.link:hover { color: var(--accent); background-size: 0% 1px }
-/* a link that goes somewhere: the arrow nudges forward */
-.link-go { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); transition: color var(--fast) var(--ease) }
+.link:hover { background-size: 0% 1px }
+/* the inverse, for names and links without an underline: one draws in from the left on hover */
+.u-in, .nav a, .brand, .row-name .nm, .pn .nm, .mods .nm, .crumbs a, .link-go > span {
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 1px; padding-bottom: 1px; transition: background-size var(--slow) var(--ease), color var(--fast) var(--ease) }
+.u-in:hover, .nav a:hover, .brand:hover, .crumbs a:hover, .link-go:hover > span, .pn a:hover .nm, .mods a:hover .nm { background-size: 100% 1px }
+@media (hover: hover) { .row:hover .nm { background-size: 100% 1px } }
+.pn .nx .nm { background-position: 100% 100% }
+/* a link that goes somewhere: the underline draws in and the arrow nudges forward */
+.link-go { display: inline-flex; align-items: center; gap: 6px; color: var(--ink) }
 .link-go .px { color: var(--ink-3); transition: color var(--fast) var(--ease), transform var(--base) var(--ease) }
-.link-go:hover { color: var(--accent) }
 .link-go:hover .px { color: currentColor; transform: translateX(3px) }
 .links { display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-2) }
 .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; color: var(--ink-3); margin-bottom: var(--sp-2) }
 .crumbs a { color: var(--ink-3); transition: color var(--fast) var(--ease) }
-.crumbs a:hover { color: var(--accent) }
 .crumbs [aria-current] { color: var(--ink) }
 .crumbs .sep { color: var(--line) }
 
@@ -97,11 +101,10 @@ a { color: inherit; text-decoration: none }
 .sheet { position: relative; z-index: 2; background: var(--bg); min-height: 100vh; min-height: 100svh; box-shadow: 0 1px 0 light-dark(rgb(0 0 0 / .04), #2a2a28) }
 .frame { width: min(var(--col), 100% - 42px); margin-inline: auto; padding: var(--sp-4) 0 var(--sp-8) }
 .top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-3); margin-bottom: clamp(var(--sp-6), 10vh, var(--sp-7)) }
-.brand { font-weight: 600; color: var(--ink); transition: color var(--fast) var(--ease) }
-.brand:hover { color: var(--accent) }
+.brand { font-weight: 600; color: var(--ink) }
 .nav { display: flex; gap: var(--sp-3) }
 .nav a { color: var(--ink-3); font: 500 11px/14px var(--mono); letter-spacing: .06em; text-transform: uppercase; transition: color var(--fast) var(--ease) }
-.nav a:hover { color: var(--accent) }
+.nav a:hover { color: var(--ink) }
 .nav a[aria-current] { color: var(--ink) }
 @media (max-width: 480px) { .nav { gap: var(--sp-2) } }
 
@@ -160,7 +163,7 @@ a { color: inherit; text-decoration: none }
 .btn:hover { opacity: .86 } .btn:active { transform: scale(.97) }
 .btn:disabled { opacity: .25; cursor: default; transform: none }
 .btn.ghost { background: none; color: var(--ink); box-shadow: inset 0 0 0 1px var(--line) }
-.btn.ghost:hover { opacity: 1; color: var(--accent); box-shadow: inset 0 0 0 1px currentColor }
+.btn.ghost:hover { opacity: 1; box-shadow: inset 0 0 0 1px var(--ink-3) }
 .btn.icon { width: 35px; padding: 0 }
 .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 .seg { display: inline-flex; gap: 2px; padding: 2px; border-radius: var(--r); background: var(--wash) }
@@ -206,7 +209,7 @@ a { color: inherit; text-decoration: none }
 .row-name .nm { font-weight: 600; color: var(--ink); transition: color var(--fast) var(--ease) }
 .row-line { display: block; color: var(--ink-2) }
 .row-year { color: var(--ink-3); transition: color var(--fast) var(--ease) }
-@media (hover: hover) { .row:hover .nm { color: var(--accent) } .row:hover .row-year { color: var(--ink-2) } }
+@media (hover: hover) { .row:hover .row-year { color: var(--ink-2) } }
 @media (max-width: 480px) { .row { grid-template-columns: 56px minmax(0, 1fr) auto } }
 /* key and value */
 .kv { display: grid; gap: var(--sp-1); margin: 0 }
@@ -285,7 +288,7 @@ a { color: inherit; text-decoration: none }
 .mods .nm { font-weight: 600; transition: color var(--fast) var(--ease) }
 .mods .ln { display: block; color: var(--ink-2) }
 .mods .px { color: var(--ink-3); transition: color var(--fast) var(--ease), transform var(--base) var(--ease); align-self: center }
-.mods a:hover .nm, .mods a:hover .px { color: var(--accent) }
+.mods a:hover .px { color: var(--ink) }
 .mods a:hover .px { transform: translateX(3px) }
 
 /* previous / next: thumbnail and name only */
@@ -295,7 +298,6 @@ a { color: inherit; text-decoration: none }
 .pn-r { display: flex; align-items: center; gap: var(--sp-2) }
 .pn .nx { text-align: right } .pn .nx .pn-r { justify-content: flex-end }
 .pn .nm { font-weight: 600; transition: color var(--fast) var(--ease) }
-.pn a:hover .nm { color: var(--accent) }
 @media (max-width: 600px) { .pn { grid-template-columns: 1fr } .pn .nx { text-align: left } .pn .nx .pn-r { justify-content: flex-end; flex-direction: row-reverse } }
 
 /* ============================== home ============================== */
@@ -340,11 +342,11 @@ a { color: inherit; text-decoration: none }
 #rail a { position: relative; display: flex; align-items: center; justify-content: flex-end; gap: 10px; height: 14px }
 #rail a i { order: 2; flex: none; display: block; height: 2px; width: 12px; border-radius: 1px; background: var(--line); transition: width .5s var(--ease), background .3s }
 #rail a.on i { width: 21px; background: var(--ink) }
-#rail a:hover i { width: 21px; background: var(--accent) }
+#rail a:hover i { width: 21px; background: var(--ink-2) }
 #rail a span { order: 1; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-3); font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
   opacity: 0; transform: translateX(6px); filter: blur(3px); transition: opacity .3s var(--ease), transform .45s var(--ease), filter .3s var(--ease), color .2s }
 #rail a.on span { opacity: 1; transform: none; filter: none; color: var(--ink) }
-#rail a:hover span { opacity: 1; transform: none; filter: none; color: var(--accent) }
+#rail a:hover span { opacity: 1; transform: none; filter: none; color: var(--ink-2) }
 @media (max-width: 1240px) { .rail { display: none } }
 /* the NDA gate: a line, then one field */
 .gate { margin-top: var(--sp-5); max-width: 420px }
@@ -494,7 +496,7 @@ a:hover .thumb.art, a:focus-visible .thumb.art { filter: none }
 .spec > span:last-child { color: var(--ink-3); white-space: nowrap }
 .bars { display: grid; gap: var(--sp-1) }
 .bars div { display: grid; grid-template-columns: 49px 42px 1fr; align-items: center; gap: var(--sp-2); color: var(--ink-3) }
-.bars b { display: block; height: 7px; border-radius: 1px; background: var(--accent); width: var(--w) }
+.bars b { display: block; height: 7px; border-radius: 1px; background: var(--ink); width: var(--w) }
 .shapes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-2) }
 .shapes div { display: grid; gap: var(--sp-1); color: var(--ink-3) }
 .shapes i { display: block; height: 56px; background: var(--wash) }

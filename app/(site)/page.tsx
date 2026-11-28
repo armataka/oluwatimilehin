@@ -14,7 +14,7 @@ export default async function Home() {
       <section className="intro">
         <p data-r>Hi, my name is <Say name={site.first} say={site.say} meaning={site.meaning} />.</p>
         {home.intro.map((p, i) => <p key={i} data-r>{lines(p)}</p>)}
-        <p data-r className="go"><a className="link-go" href="/me">{home.more || 'More about me here'}<Icon name="arrow-right" size={14} /></a></p>
+        <p data-r className="go"><a className="link-go" href="/me"><span>{home.more || 'More about me here'}</span><Icon name="arrow-right" size={14} /></a></p>
         <p className="links" data-r>
           {/* the address appears above in a small box when you point at it */}
           <a className="link tipw" href={`mailto:${site.email}`}>Email<span className="tip mono" aria-hidden="true">{site.email}</span></a>
