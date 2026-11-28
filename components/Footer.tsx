@@ -65,7 +65,7 @@ export function Footer({ name }: { name: string }) {
       sheet.style.transition = `transform ${MS}ms ${ease}, border-radius ${MS}ms ${ease}`;
       sheet.style.transform = o ? `translate3d(0, ${-(under.offsetHeight - 25)}px, 0)` : '';   // the bar's height (the footer reaches 25px further up, behind the corners)
       sheet.style.borderRadius = o ? '0 0 24.5px 24.5px' : '';
-      under.style.setProperty('--ease', o ? 'cubic-bezier(0, 0, .2, 1)' : 'cubic-bezier(.4, 0, 1, 1)');
+      under.style.setProperty('--f-ease', o ? 'cubic-bezier(0, 0, .2, 1)' : 'cubic-bezier(.4, 0, 1, 1)');
       under.style.setProperty('--p', o ? '1' : '0');
     };
     const setOpen = (o: boolean) => {
@@ -153,7 +153,7 @@ export function Footer({ name }: { name: string }) {
         </div>
           <p className={`np${np?.playing ? ' live' : ''}`}><span className="note-ic"><Icon name="music" size={16} /></span>
             {np?.title ? (
-              <><span>{np.playing ? 'Listening to' : 'Last played'}</span>{np.url ? <a href={np.url} className="dim"><span>{np.title}</span><span className="by">{np.artist}</span></a> : <span className="dim">{np.title}<span className="by">{np.artist}</span></span>}</>
+              <><span>{np.playing ? 'Listening to' : 'Last played'}</span>{np.url ? <a href={np.url} className="dim"><span>{np.title}<span className="by">{np.artist}</span></span></a> : <span className="dim">{np.title}<span className="by">{np.artist}</span></span>}</>
             ) : <span>Nothing playing</span>}
           </p>
         </div>
