@@ -75,18 +75,15 @@ a { color: inherit; text-decoration: none }
 .num { font-variant-numeric: tabular-nums }
 
 /* ============================== links ============================== */
-/* a text link: a quiet underline that pulls away on hover */
-.link { color: var(--ink); padding-bottom: 1px;
+/* every text hover is the same: a quiet underline that pulls away when you point at it (Email, LinkedIn,
+   the nav, the logo, project names, arrow links, breadcrumbs). The one exception is the name's dotted underline. */
+.link, .u-in, .nav a, .brand, .row-name .nm, .pn .nm, .mods .nm, .crumbs a, .link-go > span { padding-bottom: 1px;
   background: linear-gradient(color-mix(in srgb, currentColor 30%, transparent), color-mix(in srgb, currentColor 30%, transparent)) no-repeat 100% 100% / 100% 1px;
-  transition: color var(--fast) var(--ease), background-size var(--slow) var(--ease) }
-.link:hover { background-size: 0% 1px }
-/* the inverse, for names and links without an underline: one draws in from the left on hover */
-.u-in, .nav a, .brand, .row-name .nm, .pn .nm, .mods .nm, .crumbs a, .link-go > span {
-  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 1px; padding-bottom: 1px; transition: background-size var(--slow) var(--ease), color var(--fast) var(--ease) }
-.u-in:hover, .nav a:hover, .brand:hover, .crumbs a:hover, .link-go:hover > span, .pn a:hover .nm, .mods a:hover .nm { background-size: 100% 1px }
-@media (hover: hover) { .row:hover .nm { background-size: 100% 1px } }
-.pn .nx .nm { background-position: 100% 100% }
-/* a link that goes somewhere: the underline draws in and the arrow nudges forward */
+  transition: background-size var(--slow) var(--ease), color var(--fast) var(--ease) }
+.link { color: var(--ink) }
+.link:hover, .u-in:hover, .nav a:hover, .brand:hover, .crumbs a:hover, .link-go:hover > span, .pn a:hover .nm, .mods a:hover .nm { background-size: 0% 1px }
+@media (hover: hover) { .row:hover .nm { background-size: 0% 1px } }
+/* a link that goes somewhere: the arrow nudges forward too */
 .link-go { display: inline-flex; align-items: center; gap: 6px; color: var(--ink) }
 .link-go .px { color: var(--ink-3); transition: color var(--fast) var(--ease), transform var(--base) var(--ease) }
 .link-go:hover .px { color: currentColor; transform: translateX(3px) }
